@@ -2,7 +2,7 @@ import Tile from '@src/Tile';
 import Player from '@src/Player';
 import Vector from '@src/Vector';
 
-const PREVIEW_SIZE = 400;
+const PREVIEW_SIZE = 300;
 
 class RendererPreview {
 	private canvas = document.createElement('canvas');
@@ -24,18 +24,17 @@ class RendererPreview {
 		});
 	}
 
-
 	draw():void{
 		this.ctx.fillStyle = '#aaaaaa';
 		this.ctx.fillRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
 		this.drawTiles();
 		this.drawPlayer();
 
-		for(let i = -0.8; i < 0.8; i += 0.01){
+		for(let i = -0.7; i < 0.7; i += 0.007){
 			this.raycast(new Vector(
 				Math.cos(this.player.dir+i),
 				Math.sin(this.player.dir+i)
-			));
+			), i);
 		}
 
 		window.requestAnimationFrame(() => {
@@ -43,23 +42,13 @@ class RendererPreview {
 		});
 	}
 
-	raycast(vRayDir:Vector):void {
-
+	raycast(vRayDir:Vector, scanline:number):void {
 		const vRayStart = new Vector(this.player.x, this.player.y);
-		// const vRayDir = (new Vector(
-		// 	Math.cos(this.player.dir),
-		// 	Math.sin(this.player.dir)
-		// )).normalized;
+
 		vRayDir = vRayDir.normalized;
 
-		const vRayUnitStepSize = new Vector(
-			Math.sqrt(1 + (vRayDir.y / vRayDir.x) * (vRayDir.y / vRayDir.x)),
-			Math.sqrt(1 + (vRayDir.x / vRayDir.y) * (vRayDir.x / vRayDir.y)),
-		);
-		const vMapCheck = new Vector(
-			Math.floor(vRayStart.x),
-			Math.floor(vRayStart.y),
-		);
+		const vRayUnitStepSize = new Vector(Math.abs(1 / vRayDir.x), Math.abs(1 / vRayDir.y),);
+		const vMapCheck = new Vector(Math.floor(vRayStart.x), Math.floor(vRayStart.y),);
 		const vRayLength1D:Vector = new Vector(0,0);
 		const vStep:Vector = new Vector(0,0);
 
@@ -102,7 +91,7 @@ class RendererPreview {
 		let vIntersection = new Vector(0,0);
 		if(bTileFound){
 			vIntersection = vRayStart.add(vRayDir.multiply(fDistance));
-			// console.log(vIntersection);
+
 			this.ctx.beginPath();
 			this.ctx.fillStyle = '#3bff00';
 			this.ctx.strokeStyle = '#b7f1a6';
@@ -122,7 +111,6 @@ class RendererPreview {
 			this.ctx.fill();
 			this.ctx.stroke();
 		}else{
-			// console.log(vRayStart, vRayDir, fDistance);
 			this.ctx.beginPath();
 			this.ctx.fillStyle = '#3bff00';
 			this.ctx.strokeStyle = '#b7f1a6';

@@ -3,10 +3,12 @@ import RendererPreview from '@src/RendererPreview';
 import KeyboardController from '@src/KeyboardController';
 import Player from '@src/Player';
 import AnimationClock from '@src/AnimationClock';
+import Renderer from '@src/Renderer';
 
 class Game {
 	public map:Tile[][] = [];
-	private mapSize = 10;
+	private mapSize = 12;
+	private renderer: Renderer;
 	private rendererPreview:RendererPreview;
 	private tiles:Tile[] = [];
 	private player = new Player();
@@ -17,8 +19,10 @@ class Game {
 	constructor(){
 		this.initMap();
 		this.element = document.createElement('div');
+		this.renderer = new Renderer(this.map, this.tiles, this.player);
 		this.rendererPreview = new RendererPreview(this.map, this.tiles, this.player);
 		this.element.appendChild(this.rendererPreview.render());
+		this.element.appendChild(this.renderer.render());
 		this.initControls();
 
 		this.animationClock = new AnimationClock();
@@ -34,6 +38,9 @@ class Game {
 				const newTile:Tile = new Tile(x, y, 'null');
 				this.map[x][y] = newTile;
 				this.tiles.push(newTile);
+				if(x === 0 || x === this.mapSize-1 || y === 0 || y === this.mapSize-1){
+					newTile.type = 'wall';
+				}
 			}
 		}
 	}

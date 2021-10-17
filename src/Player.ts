@@ -2,7 +2,7 @@ class Player {
 	public speed = 0;
 	public rotationSpeed = 0;
 
-	constructor(public x = 5.2, public y = 5.2, public dir:number = 0){
+	constructor(public x = 5.5, public y = 5.5, public dir:number = 0){
 
 	}
 

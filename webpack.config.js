@@ -16,12 +16,16 @@ module.exports = {
 				test: /\.s[ac]ss$/i,
 				use: [
 					// Creates `style` nodes from JS strings
-					"style-loader",
+					'style-loader',
 					// Translates CSS into CommonJS
-					"css-loader",
+					'css-loader',
 					// Compiles Sass to CSS
-					"sass-loader",
+					'sass-loader',
 				],
+			},
+			{
+				test: /\.(png|svg|jpg|jpeg|gif)$/i,
+				type: 'asset/resource',
 			},
 		],
 	},
@@ -33,7 +37,7 @@ module.exports = {
 	},
 	plugins: [
 		new HtmlWebpackPlugin({
-			title: "Wolfenstein 3d"
+			title: 'Wolfenstein 3d'
 		})
 	],
 	devServer: {
