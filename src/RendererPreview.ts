@@ -1,6 +1,7 @@
 import Tile from '@src/Tile';
 import Player from '@src/Player';
 import Vector from '@src/Vector';
+import Raycaster from '@src/Raycaster';
 
 const PREVIEW_SIZE = 300;
 
@@ -8,12 +9,17 @@ class RendererPreview {
 	private canvas = document.createElement('canvas');
 	private ctx:CanvasRenderingContext2D;
 	private tileSize:number;
+	private raycaster:Raycaster;
 
 	constructor(private map:Tile[][], private tiles:Tile[], private player:Player){
 		this.ctx = this.canvas.getContext('2d')!;
 		this.canvas.width = PREVIEW_SIZE;
 		this.canvas.height = PREVIEW_SIZE;
 		this.tileSize = PREVIEW_SIZE / this.map.length;
+
+		this.raycaster = new Raycaster((x:number, y:number) => {
+			return this.map[x]?.[y]?.type === 'wall';
+		});
 
 		this.canvas.onclick = (e) => {
 			this.click(e);
@@ -34,7 +40,7 @@ class RendererPreview {
 			this.raycast(new Vector(
 				Math.cos(this.player.dir+i),
 				Math.sin(this.player.dir+i)
-			), i);
+			));
 		}
 
 		window.requestAnimationFrame(() => {
@@ -42,56 +48,13 @@ class RendererPreview {
 		});
 	}
 
-	raycast(vRayDir:Vector, scanline:number):void {
+	raycast(vRayDir:Vector):void {
+
 		const vRayStart = new Vector(this.player.x, this.player.y);
 
-		vRayDir = vRayDir.normalized;
+		const {found, vIntersection} = this.raycaster.raycast(vRayDir, vRayStart);
 
-		const vRayUnitStepSize = new Vector(Math.abs(1 / vRayDir.x), Math.abs(1 / vRayDir.y),);
-		const vMapCheck = new Vector(Math.floor(vRayStart.x), Math.floor(vRayStart.y),);
-		const vRayLength1D:Vector = new Vector(0,0);
-		const vStep:Vector = new Vector(0,0);
-
-		if(vRayDir.x < 0){
-			vStep.x = -1;
-			vRayLength1D.x = (vRayStart.x - vMapCheck.x) * vRayUnitStepSize.x;
-		}else{
-			vStep.x = 1;
-			vRayLength1D.x = (vMapCheck.x + 1 - vRayStart.x) * vRayUnitStepSize.x;
-		}
-
-		if(vRayDir.y < 0){
-			vStep.y = -1;
-			vRayLength1D.y = (vRayStart.y - vMapCheck.y) * vRayUnitStepSize.y;
-		}else{
-			vStep.y = 1;
-			vRayLength1D.y = (vMapCheck.y + 1 - vRayStart.y) * vRayUnitStepSize.y;
-		}
-
-		let bTileFound = false;
-		const fMaxDistance = 20;
-		let fDistance = 0;
-
-		while(!bTileFound && fDistance < fMaxDistance){
-			if(vRayLength1D.x < vRayLength1D.y){
-				vMapCheck.x = Math.floor(vMapCheck.x + vStep.x);
-				fDistance = vRayLength1D.x;
-				vRayLength1D.x += vRayUnitStepSize.x;
-			}else {
-				vMapCheck.y = Math.floor(vMapCheck.y + vStep.y);
-				fDistance = vRayLength1D.y;
-				vRayLength1D.y += vRayUnitStepSize.y;
-			}
-			if(this.map[Math.floor(vMapCheck.x)]?.[Math.floor(vMapCheck.y)]?.type === 'wall'){
-				bTileFound = true;
-			}
-		}
-
-
-		let vIntersection = new Vector(0,0);
-		if(bTileFound){
-			vIntersection = vRayStart.add(vRayDir.multiply(fDistance));
-
+		if(found){
 			this.ctx.beginPath();
 			this.ctx.fillStyle = '#3bff00';
 			this.ctx.strokeStyle = '#b7f1a6';

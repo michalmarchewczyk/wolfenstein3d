@@ -2,12 +2,14 @@ import textures from './assets/textures.png';
 import Vector from '@src/Vector';
 import Tile from '@src/Tile';
 import Player from '@src/Player';
+import Raycaster from '@src/Raycaster';
 
 class Renderer {
 	private element:HTMLDivElement;
 	private canvas = document.createElement('canvas');
 	private ctx:CanvasRenderingContext2D;
 	private texturesImg: HTMLImageElement;
+	private raycaster:Raycaster;
 
 	constructor(private map:Tile[][], private tiles:Tile[], private player:Player){
 		this.element = document.createElement('div');
@@ -19,6 +21,10 @@ class Renderer {
 
 		this.texturesImg = new Image();
 		this.texturesImg.src = textures;
+
+		this.raycaster = new Raycaster((x:number, y:number) => {
+			return this.map[x]?.[y]?.type === 'wall';
+		});
 
 		window.requestAnimationFrame(() => {
 			this.draw();
@@ -44,103 +50,51 @@ class Renderer {
 	}
 
 	raycast(vRayDir:Vector, scanline:number):void {
+
 		const vRayStart = new Vector(this.player.x, this.player.y);
 
-		vRayDir = vRayDir.normalized;
+		const {distance, found, vIntersection, side, perpWallDist, vStep} = this.raycaster.raycast(vRayDir, vRayStart);
 
-		const vRayUnitStepSize = new Vector(Math.abs(1 / vRayDir.x), Math.abs(1 / vRayDir.y),);
-		const vMapCheck = new Vector(Math.floor(vRayStart.x), Math.floor(vRayStart.y),);
-		const vRayLength1D:Vector = new Vector(0,0);
-		const vStep:Vector = new Vector(0,0);
+		if(!found) return;
 
-		if(vRayDir.x < 0){
-			vStep.x = -1;
-			vRayLength1D.x = (vRayStart.x - vMapCheck.x) * vRayUnitStepSize.x;
-		}else{
-			vStep.x = 1;
-			vRayLength1D.x = (vMapCheck.x + 1 - vRayStart.x) * vRayUnitStepSize.x;
+		let darkness = 0;
+		let xTex = 0;
+
+		if(side === 0 && vStep.x < 0){
+			darkness = 0;
+			xTex = 1 - (vIntersection.y - Math.floor(vIntersection.y));
+		}else if(side === 0 && vStep.x > 0){
+			darkness = 0.4;
+			xTex = vIntersection.y - Math.floor(vIntersection.y);
+		}else if(side === 1 && vStep.y < 0){
+			darkness = 0.2;
+			xTex = vIntersection.x - Math.floor(vIntersection.x);
+		}else if(side === 1 && vStep.y > 0){
+			darkness = 0.5;
+			xTex = 1 - (vIntersection.x - Math.floor(vIntersection.x));
 		}
-		if(vRayDir.y < 0){
-			vStep.y = -1;
-			vRayLength1D.y = (vRayStart.y - vMapCheck.y) * vRayUnitStepSize.y;
-		}else{
-			vStep.y = 1;
-			vRayLength1D.y = (vMapCheck.y + 1 - vRayStart.y) * vRayUnitStepSize.y;
-		}
-
-		let bTileFound = false;
-		const fMaxDistance = 20;
-		let fDistance = 0;
-		let side = 0;
-
-		while(!bTileFound && fDistance < fMaxDistance){
-			if(vRayLength1D.x < vRayLength1D.y){
-				vMapCheck.x = Math.floor(vMapCheck.x + vStep.x);
-				fDistance = vRayLength1D.x;
-				vRayLength1D.x += vRayUnitStepSize.x;
-				side = 0;
-			} else {
-				vMapCheck.y = Math.floor(vMapCheck.y + vStep.y);
-				fDistance = vRayLength1D.y;
-				vRayLength1D.y += vRayUnitStepSize.y;
-				side = 1;
-			}
-			if(this.map[Math.floor(vMapCheck.x)]?.[Math.floor(vMapCheck.y)]?.type === 'wall'){
-				bTileFound = true;
-			}
-		}
+		darkness = darkness + distance/20;
 
 
-		let vIntersection = new Vector(0,0);
-		if(bTileFound){
-			vIntersection = vRayStart.add(vRayDir.multiply(fDistance));
-
-			let perpWallDist = 0;
-
-			if(side === 0){
-				perpWallDist = vRayLength1D.x - vRayUnitStepSize.x;
-			}else{
-				perpWallDist = vRayLength1D.y - vRayUnitStepSize.y;
-			}
-
-			let darkness = 0;
-
-			let xTex = 0;
-
-			if(side === 0 && vStep.x < 0){
-				darkness = 0;
-				xTex = 1 - (vIntersection.y - Math.floor(vIntersection.y));
-			}else if(side === 0 && vStep.x > 0){
-				darkness = 0.4;
-				xTex = vIntersection.y - Math.floor(vIntersection.y);
-			}else if(side === 1 && vStep.y < 0){
-				darkness = 0.2;
-				xTex = vIntersection.x - Math.floor(vIntersection.x);
-			}else if(side === 1 && vStep.y > 0){
-				darkness = 0.5;
-				xTex = 1 - (vIntersection.x - Math.floor(vIntersection.x));
-			}
-
-
-			this.drawLine(
-				(scanline+0.7) * 458,
-				400 / (perpWallDist * Math.cos(scanline/1.1)),
-				`hsl(${xTex*360},90%, ${50-perpWallDist*1-darkness*20}%)`,
-				xTex);
-		}
+		this.drawLine(
+			(scanline+0.7) * 458,
+			400 / (perpWallDist * Math.cos(scanline/1.1)),
+			darkness,
+			xTex);
 	}
 
-	drawLine(scanline: number, height: number, color: string, xTex:number):void {
-		// this.ctx.beginPath();
-		// this.ctx.fillStyle = color;
-		// this.ctx.rect(scanline, 240-height/2, 4, height);
-		//
-		// this.ctx.fill();w
-
+	drawLine(scanline: number, height: number, darkness: number, xTex:number):void {
 		this.ctx.drawImage(this.texturesImg,
 			128 + xTex*64, 128, 1, 64,
 			scanline, 240-height/2, 4, height
 		);
+
+		this.ctx.globalAlpha = darkness/2;
+		this.ctx.beginPath();
+		this.ctx.fillStyle = '#000000';
+		this.ctx.rect(scanline-0.5, 240-height/2, 5, height);
+		this.ctx.fill();
+		this.ctx.globalAlpha = 1;
 	}
 
 
