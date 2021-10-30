@@ -15,12 +15,17 @@ class Game {
 	private renderer: Renderer;
 	private rendererPreview:RendererPreview;
 	private tiles:Tile[] = [];
-	private player = new Player();
+	private player:Player;
 	private element:HTMLDivElement;
 	private keyboardController:KeyboardController = new KeyboardController();
 	private animationClock:AnimationClock;
 
 	constructor(){
+		this.player = new Player(5.5, 5.5, 0, (x,y) => {
+			return !!this.tiles
+				.filter(t => t.x === Math.floor(x) && t.y === Math.floor(y))
+				.find(t => t.type.opaque);
+		});
 		this.initMap();
 		this.element = document.createElement('div');
 		this.renderer = new Renderer(this.map, this.tiles, this.player, this.sprites);

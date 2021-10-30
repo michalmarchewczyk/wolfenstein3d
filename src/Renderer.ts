@@ -51,24 +51,12 @@ class Renderer {
 			), i);
 		}
 
-		// console.log(this.zBuffer);
-
-		// this.ctx.beginPath();
-		// this.ctx.strokeStyle = '#ff0000';
-		// this.ctx.moveTo(0,0);
-		// this.ctx.lineTo(640, 480);
-		//
-		// this.ctx.stroke();
-
 
 		this.sprites.sort((a,b) => {
 			const distA = Math.sqrt((this.player.x - a.x) * (this.player.x - a.x) + (this.player.y - a.y) * (this.player.y - a.y));
 			const distB = Math.sqrt((this.player.x - b.x) * (this.player.x - b.x) + (this.player.y - b.y) * (this.player.y - b.y));
 			return distB - distA;
 		});
-
-		// console.log(this.zBuffer);
-		// console.log(this.sprites);
 
 		this.drawSprites();
 
@@ -82,8 +70,6 @@ class Renderer {
 		const vRayStart = new Vector(this.player.x, this.player.y);
 
 		const {distance, found, vIntersection, side, perpWallDist, vStep, vFound} = this.raycaster.raycast(vRayDir, vRayStart);
-
-		// this.zBuffer[(scanline+0.7) * 458] = 1000000;
 
 		if(!found) {
 			this.zBuffer.push(100000);
@@ -110,8 +96,6 @@ class Renderer {
 
 		const foundTile:Tile = this.map[vFound.x][vFound.y];
 
-		// this.zBuffer[(scanline+0.7) * 458] = (perpWallDist * Math.cos(scanline/1.2));
-		// this.zBuffer[(scanline+0.7) * 458] = distance;
 		this.zBuffer.push(distance);
 
 		this.drawLine(

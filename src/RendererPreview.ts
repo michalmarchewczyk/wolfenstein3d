@@ -154,12 +154,6 @@ class RendererPreview {
 
 		const newIndex = (currentIndex+1) % Object.values(tileTypes).length;
 
-		// if(tileFound.type === tileTypes.nullTile){
-		// 	tileFound.type = tileTypes.wallTile;
-		// }else{
-		// 	tileFound.type = tileTypes.nullTile;
-		// }
-
 		tileFound.type = Object.values(tileTypes)[newIndex];
 	}
 
