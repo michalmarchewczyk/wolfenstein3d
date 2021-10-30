@@ -7,6 +7,7 @@ interface RaycasterResult {
 	side: number,
 	perpWallDist: number,
 	vStep: Vector,
+	vFound: Vector,
 }
 
 class Raycaster {
@@ -33,6 +34,7 @@ class Raycaster {
 		const fMaxDistance = 20;
 		let fDistance = 0;
 		let side = 0;
+		let vFound = new Vector(0,0);
 
 		while(!bTileFound && fDistance < fMaxDistance){
 			if(vRayLength1D.x < vRayLength1D.y){
@@ -48,6 +50,7 @@ class Raycaster {
 			}
 			if(this.checkFunction(Math.floor(vMapCheck.x), Math.floor(vMapCheck.y))){
 				bTileFound = true;
+				vFound = new Vector(Math.floor(vMapCheck.x), Math.floor(vMapCheck.y));
 			}
 		}
 
@@ -72,6 +75,7 @@ class Raycaster {
 			side,
 			perpWallDist,
 			vStep,
+			vFound,
 		};
 	}
 }

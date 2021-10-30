@@ -1,7 +1,10 @@
-type tileType = 'null' | 'wall';
+import TileType, {tileTypes} from '@src/TileType';
+
+
+
 
 class Tile {
-	constructor(public x:number, public y:number, public type:tileType = 'null'){
+	constructor(public x:number, public y:number, public type:TileType = tileTypes.nullTile){
 
 	}
 }

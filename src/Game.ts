@@ -4,9 +4,13 @@ import KeyboardController from '@src/KeyboardController';
 import Player from '@src/Player';
 import AnimationClock from '@src/AnimationClock';
 import Renderer from '@src/Renderer';
+import {tileTypes} from '@src/TileType';
+import Sprite from '@src/Sprite';
+
 
 class Game {
 	public map:Tile[][] = [];
+	public sprites:Sprite[] = [];
 	private mapSize = 12;
 	private renderer: Renderer;
 	private rendererPreview:RendererPreview;
@@ -19,8 +23,8 @@ class Game {
 	constructor(){
 		this.initMap();
 		this.element = document.createElement('div');
-		this.renderer = new Renderer(this.map, this.tiles, this.player);
-		this.rendererPreview = new RendererPreview(this.map, this.tiles, this.player);
+		this.renderer = new Renderer(this.map, this.tiles, this.player, this.sprites);
+		this.rendererPreview = new RendererPreview(this.map, this.tiles, this.player, this.sprites);
 		this.element.appendChild(this.rendererPreview.render());
 		this.element.appendChild(this.renderer.render());
 		this.initControls();
@@ -35,11 +39,11 @@ class Game {
 		for(let x = 0; x < this.mapSize; x++){
 			this.map[x] = [];
 			for(let y = 0; y < this.mapSize; y++){
-				const newTile:Tile = new Tile(x, y, 'null');
+				const newTile:Tile = new Tile(x, y);
 				this.map[x][y] = newTile;
 				this.tiles.push(newTile);
 				if(x === 0 || x === this.mapSize-1 || y === 0 || y === this.mapSize-1){
-					newTile.type = 'wall';
+					newTile.type = tileTypes.wallTile;
 				}
 			}
 		}
@@ -57,13 +61,13 @@ class Game {
 
 	initControls() {
 		this.keyboardController.addListener('w', 'down', () => {
-			this.player.speed = 2;
+			this.player.speed = 4;
 		});
 		this.keyboardController.addListener('w', 'up', () => {
 			this.player.speed = 0;
 		});
 		this.keyboardController.addListener('s', 'down', () => {
-			this.player.speed = -2;
+			this.player.speed = -4;
 		});
 		this.keyboardController.addListener('s', 'up', () => {
 			this.player.speed = 0;

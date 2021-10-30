@@ -2,8 +2,11 @@ import Tile from '@src/Tile';
 import Player from '@src/Player';
 import Vector from '@src/Vector';
 import Raycaster from '@src/Raycaster';
+import {tileTexture, tileTypes} from '@src/TileType';
+import Sprite from '@src/Sprite';
+import {spriteTexture} from '@src/SpriteTexture';
 
-const PREVIEW_SIZE = 300;
+const PREVIEW_SIZE = 400;
 
 class RendererPreview {
 	private canvas = document.createElement('canvas');
@@ -11,14 +14,14 @@ class RendererPreview {
 	private tileSize:number;
 	private raycaster:Raycaster;
 
-	constructor(private map:Tile[][], private tiles:Tile[], private player:Player){
+	constructor(private map:Tile[][], private tiles:Tile[], private player:Player, private sprites:Sprite[]){
 		this.ctx = this.canvas.getContext('2d')!;
 		this.canvas.width = PREVIEW_SIZE;
 		this.canvas.height = PREVIEW_SIZE;
 		this.tileSize = PREVIEW_SIZE / this.map.length;
 
 		this.raycaster = new Raycaster((x:number, y:number) => {
-			return this.map[x]?.[y]?.type === 'wall';
+			return this.map[x]?.[y]?.type.opaque;
 		});
 
 		this.canvas.onclick = (e) => {
@@ -42,6 +45,11 @@ class RendererPreview {
 				Math.sin(this.player.dir+i)
 			));
 		}
+
+		this.sprites.forEach(sprite => {
+			this.ctx.drawImage(spriteTexture, sprite.texture.xImg, sprite.texture.yImg, 128, 128,
+				(sprite.x-0.5) * this.tileSize, (sprite.y-0.5)*this.tileSize, this.tileSize, this.tileSize);
+		});
 
 		window.requestAnimationFrame(() => {
 			this.draw();
@@ -97,10 +105,15 @@ class RendererPreview {
 
 		this.tiles.forEach(tile => {
 			this.ctx.fillStyle = '#aaaaaa';
-			if (tile.type === 'wall') {
+			if (tile.type.opaque) {
 				this.ctx.fillStyle = '#134ac2';
 			}
 			this.ctx.fillRect(tile.x * this.tileSize, tile.y * this.tileSize, this.tileSize, this.tileSize);
+			if(tile.type.opaque){
+				this.ctx.drawImage(tileTexture,
+					tile.type.xImg, tile.type.yImg, 64, 64,
+					tile.x * this.tileSize, tile.y * this.tileSize, this.tileSize, this.tileSize);
+			}
 			this.ctx.rect(tile.x * this.tileSize, tile.y * this.tileSize, this.tileSize, this.tileSize);
 		});
 		this.ctx.stroke();
@@ -137,11 +150,17 @@ class RendererPreview {
 
 		if(!tileFound) return;
 
-		if(tileFound.type === 'null'){
-			tileFound.type = 'wall';
-		}else{
-			tileFound.type = 'null';
-		}
+		const currentIndex:number = Object.values(tileTypes).findIndex(v => v===tileFound.type);
+
+		const newIndex = (currentIndex+1) % Object.values(tileTypes).length;
+
+		// if(tileFound.type === tileTypes.nullTile){
+		// 	tileFound.type = tileTypes.wallTile;
+		// }else{
+		// 	tileFound.type = tileTypes.nullTile;
+		// }
+
+		tileFound.type = Object.values(tileTypes)[newIndex];
 	}
 
 
