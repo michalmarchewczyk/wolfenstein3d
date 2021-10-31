@@ -6,7 +6,7 @@ import {tileTexture, tileTypes} from '@src/TileType';
 import Sprite from '@src/Sprite';
 import {spriteTexture} from '@src/SpriteTexture';
 
-const PREVIEW_SIZE = 400;
+const PREVIEW_SIZE = 1000;
 
 class RendererPreview {
 	private canvas = document.createElement('canvas');

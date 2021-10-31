@@ -83,24 +83,28 @@ class Renderer {
 			darkness = 0;
 			xTex = 1 - (vIntersection.y - Math.floor(vIntersection.y));
 		}else if(side === 0 && vStep.x > 0){
-			darkness = 0.4;
+			darkness = 0;
 			xTex = vIntersection.y - Math.floor(vIntersection.y);
 		}else if(side === 1 && vStep.y < 0){
-			darkness = 0.2;
+			darkness = 0.6;
 			xTex = vIntersection.x - Math.floor(vIntersection.x);
 		}else if(side === 1 && vStep.y > 0){
-			darkness = 0.5;
+			darkness = 0.6;
 			xTex = 1 - (vIntersection.x - Math.floor(vIntersection.x));
 		}
 		darkness = darkness + distance/20;
 
 		const foundTile:Tile = this.map[vFound.x][vFound.y];
 
+
 		this.zBuffer.push(distance);
 
 		this.drawLine(
 			(scanline+0.7) * 458,
-			400 / (perpWallDist * Math.cos(scanline/1.2)),
+			// 400 / (perpWallDist * Math.cos(scanline/1.6)),
+			400 / (perpWallDist * Math.cos(scanline/(
+				Math.abs(Math.cos(side * Math.PI/2 - this.player.dir)) * -0.3 + 1.4
+			))),
 			darkness,
 			xTex,
 			foundTile);

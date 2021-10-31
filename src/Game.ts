@@ -11,7 +11,7 @@ import Sprite from '@src/Sprite';
 class Game {
 	public map:Tile[][] = [];
 	public sprites:Sprite[] = [];
-	private mapSize = 12;
+	private mapSize = 64;
 	private renderer: Renderer;
 	private rendererPreview:RendererPreview;
 	private tiles:Tile[] = [];
