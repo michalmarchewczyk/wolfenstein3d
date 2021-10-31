@@ -41,14 +41,14 @@ class Renderer {
 		this.ctx.fillRect(0, 0, 640, 240);
 
 
-
 		this.zBuffer = [];
 
-		for(let i = -0.7; i < 0.7; i += 0.007){
+		for(let i = -0.7; i <= 0.7; i += 0.007){
+			const offset = Math.atan(i/0.85);
 			this.raycast(new Vector(
-				Math.cos(this.player.dir+i),
-				Math.sin(this.player.dir+i)
-			), i);
+				Math.cos(this.player.dir+offset),
+				Math.sin(this.player.dir+offset)
+			), i, offset);
 		}
 
 
@@ -65,7 +65,7 @@ class Renderer {
 		});
 	}
 
-	raycast(vRayDir:Vector, scanline:number):void {
+	raycast(vRayDir:Vector, scanline:number, angle:number):void {
 
 		const vRayStart = new Vector(this.player.x, this.player.y);
 
@@ -101,10 +101,7 @@ class Renderer {
 
 		this.drawLine(
 			Math.floor((scanline+0.7) * 458),
-			// 400 / (perpWallDist * Math.cos(scanline/1.6)),
-			400 / (perpWallDist * Math.cos(scanline/(
-				Math.abs(Math.cos(side * Math.PI/2 - (this.player.dir+scanline/2))) * -0.3 + 1.3
-			))),
+			400 / (perpWallDist * Math.cos(angle)),
 			darkness,
 			xTex,
 			foundTile);
@@ -121,7 +118,7 @@ class Renderer {
 		this.ctx.globalAlpha = darkness/2;
 		this.ctx.beginPath();
 		this.ctx.fillStyle = '#000000';
-		this.ctx.rect(scanline-0.0, 240-height/2, 4, height);
+		this.ctx.rect(scanline, 240-height/2, 4, height);
 		this.ctx.fill();
 		this.ctx.globalAlpha = 1;
 	}
