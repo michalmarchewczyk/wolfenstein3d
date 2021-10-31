@@ -100,10 +100,10 @@ class Renderer {
 		this.zBuffer.push(distance);
 
 		this.drawLine(
-			(scanline+0.7) * 458,
+			Math.floor((scanline+0.7) * 458),
 			// 400 / (perpWallDist * Math.cos(scanline/1.6)),
 			400 / (perpWallDist * Math.cos(scanline/(
-				Math.abs(Math.cos(side * Math.PI/2 - this.player.dir)) * -0.3 + 1.4
+				Math.abs(Math.cos(side * Math.PI/2 - (this.player.dir+scanline/2))) * -0.3 + 1.3
 			))),
 			darkness,
 			xTex,
@@ -114,14 +114,14 @@ class Renderer {
 		this.ctx.imageSmoothingEnabled = false;
 
 		this.ctx.drawImage(this.texturesImg,
-			tile.type.xImg + xTex*64, tile.type.yImg, 0.1, 64,
-			scanline, 240-height/2, 3.3, height
+			tile.type.xImg + xTex*64, tile.type.yImg, 220/height, 64,
+			scanline, 240-height/2, 3.6, height
 		);
 
 		this.ctx.globalAlpha = darkness/2;
 		this.ctx.beginPath();
 		this.ctx.fillStyle = '#000000';
-		this.ctx.rect(scanline-0.3, 240-height/2, 3.6, height);
+		this.ctx.rect(scanline-0.0, 240-height/2, 4, height);
 		this.ctx.fill();
 		this.ctx.globalAlpha = 1;
 	}
