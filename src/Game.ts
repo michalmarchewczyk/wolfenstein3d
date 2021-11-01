@@ -22,7 +22,7 @@ class Game {
 	private animationClock:AnimationClock;
 
 	constructor(){
-		this.player = new Player(5.5, 5.5, 0, (x,y) => {
+		this.player = new Player(30.5, 49.5, 0, (x,y) => {
 			return !!this.tiles
 				.filter(t => t.x === Math.floor(x) && t.y === Math.floor(y))
 				.find(t => t.type.opaque);
@@ -50,7 +50,7 @@ class Game {
 				this.tiles.push(newTile);
 				const loaded = map[x]?.[y];
 				let type:TileType = tileTypes.null;
-				type = Object.values(tileTypes).find(type => type?.xImg === loaded?.type?.xImg && type?.yImg === loaded?.type?.yImg) ?? type;
+				type = Object.values(tileTypes).find(type => type?.xImg === loaded?.type?.xImg && type?.yImg === loaded?.type?.yImg && type?.opaque === loaded?.type?.opaque) ?? type;
 				newTile.type = type;
 			}
 		}

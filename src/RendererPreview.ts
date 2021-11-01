@@ -122,8 +122,8 @@ class RendererPreview {
 				this.player.y * this.tileSize
 			);
 			this.ctx.lineTo(
-				vRayDir.multiply(20).add(vRayStart).x * this.tileSize,
-				vRayDir.multiply(20).add(vRayStart).y * this.tileSize,
+				vRayDir.multiply(200).add(vRayStart).x * this.tileSize,
+				vRayDir.multiply(200).add(vRayStart).y * this.tileSize,
 			);
 			this.ctx.fill();
 			this.ctx.stroke();
@@ -136,7 +136,7 @@ class RendererPreview {
 		this.ctx.strokeStyle = '#dddddd';
 
 		this.tiles.forEach(tile => {
-			this.ctx.fillStyle = '#aaaaaa';
+			this.ctx.fillStyle = '#c2c2c2';
 			if (tile.type.opaque) {
 				this.ctx.fillStyle = '#134ac2';
 			}
