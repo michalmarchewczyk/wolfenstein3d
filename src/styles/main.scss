@@ -9,4 +9,18 @@ body {
 
 canvas {
   float: left;
+  image-rendering: pixelated;
+}
+
+.tileSelector {
+  border: 1px solid red;
+  float: left;
+  margin: 10px;
+
+  div {
+    position: relative;
+    width: 40px;
+    height: 40px;
+    border: 1px solid green;
+  }
 }

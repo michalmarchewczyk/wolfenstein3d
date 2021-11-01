@@ -13,12 +13,15 @@ class RendererPreview {
 	private ctx:CanvasRenderingContext2D;
 	private tileSize:number;
 	private raycaster:Raycaster;
+	private tileSelector = document.createElement('div');
+	private selectedIndex = 0;
 
 	constructor(private map:Tile[][], private tiles:Tile[], private player:Player, private sprites:Sprite[]){
 		this.ctx = this.canvas.getContext('2d')!;
 		this.canvas.width = PREVIEW_SIZE;
 		this.canvas.height = PREVIEW_SIZE;
 		this.tileSize = PREVIEW_SIZE / this.map.length;
+		this.tileSelector.classList.add('tileSelector');
 
 		this.raycaster = new Raycaster((x:number, y:number) => {
 			return this.map[x]?.[y]?.type.opaque;
@@ -27,6 +30,8 @@ class RendererPreview {
 		this.canvas.onclick = (e) => {
 			this.click(e);
 		};
+
+		this.drawSelector();
 
 		window.requestAnimationFrame(() => {
 			this.draw();
@@ -39,10 +44,11 @@ class RendererPreview {
 		this.drawTiles();
 		this.drawPlayer();
 
-		for(let i = -0.7; i < 0.7; i += 0.007){
+		for(let i = -0.7; i <= 0.7; i += 0.007){
+			const offset = Math.atan(i/0.9);
 			this.raycast(new Vector(
-				Math.cos(this.player.dir+i),
-				Math.sin(this.player.dir+i)
+				Math.cos(this.player.dir+offset),
+				Math.sin(this.player.dir+offset)
 			));
 		}
 
@@ -54,6 +60,32 @@ class RendererPreview {
 		window.requestAnimationFrame(() => {
 			this.draw();
 		});
+	}
+
+	drawSelector() {
+		this.tileSelector.innerHTML = '';
+
+		Object.values(tileTypes).forEach((type,i) => {
+			const el = document.createElement('div');
+			if(type.opaque){
+				el.style.backgroundImage = `url(${tileTexture.src})`;
+				el.style.backgroundSize = '240px 760px';
+				el.style.backgroundRepeat = 'no-repeat';
+				el.style.backgroundPosition = `${type.xImg / 64 * 40 * -1}px ${type.yImg / 64 * 40 * -1}px`;
+			}
+			el.onclick = () => {
+				this.selectedIndex = i;
+			};
+			this.tileSelector.appendChild(el);
+		});
+
+		const saveButton = document.createElement('button');
+		this.tileSelector.appendChild(saveButton);
+		saveButton.innerText = 'SAVE';
+		saveButton.onclick = async () => {
+			await navigator.clipboard.writeText(JSON.stringify(this.map, null, 4));
+			alert('Map JSON copied to clipboard');
+		};
 	}
 
 	raycast(vRayDir:Vector):void {
@@ -150,16 +182,21 @@ class RendererPreview {
 
 		if(!tileFound) return;
 
-		const currentIndex:number = Object.values(tileTypes).findIndex(v => v===tileFound.type);
+		// const currentIndex:number = Object.values(tileTypes).findIndex(v => v===tileFound.type);
+		//
+		// const newIndex = (currentIndex+1) % Object.values(tileTypes).length;
+		//
+		// tileFound.type = Object.values(tileTypes)[newIndex];
 
-		const newIndex = (currentIndex+1) % Object.values(tileTypes).length;
-
-		tileFound.type = Object.values(tileTypes)[newIndex];
+		tileFound.type = Object.values(tileTypes)[this.selectedIndex];
 	}
 
 
-	render():HTMLCanvasElement {
-		return this.canvas;
+	render():HTMLDivElement {
+		const el = document.createElement('div');
+		el.appendChild(this.canvas);
+		el.appendChild(this.tileSelector);
+		return el;
 	}
 }
 

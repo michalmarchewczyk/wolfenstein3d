@@ -4,8 +4,9 @@ import KeyboardController from '@src/KeyboardController';
 import Player from '@src/Player';
 import AnimationClock from '@src/AnimationClock';
 import Renderer from '@src/Renderer';
-import {tileTypes} from '@src/TileType';
+import TileType, {tileTypes} from '@src/TileType';
 import Sprite from '@src/Sprite';
+import map from './maps/test1.json';
 
 
 class Game {
@@ -47,9 +48,10 @@ class Game {
 				const newTile:Tile = new Tile(x, y);
 				this.map[x][y] = newTile;
 				this.tiles.push(newTile);
-				if(x === 0 || x === this.mapSize-1 || y === 0 || y === this.mapSize-1){
-					newTile.type = tileTypes.wallTile;
-				}
+				const loaded = map[x]?.[y];
+				let type:TileType = tileTypes.null;
+				type = Object.values(tileTypes).find(type => type?.xImg === loaded?.type?.xImg && type?.yImg === loaded?.type?.yImg) ?? type;
+				newTile.type = type;
 			}
 		}
 	}

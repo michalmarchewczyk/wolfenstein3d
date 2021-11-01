@@ -86,10 +86,10 @@ class Renderer {
 			darkness = 0;
 			xTex = vIntersection.y - Math.floor(vIntersection.y);
 		}else if(side === 1 && vStep.y < 0){
-			darkness = 0.6;
+			darkness = 0.8;
 			xTex = vIntersection.x - Math.floor(vIntersection.x);
 		}else if(side === 1 && vStep.y > 0){
-			darkness = 0.6;
+			darkness = 0.8;
 			xTex = 1 - (vIntersection.x - Math.floor(vIntersection.x));
 		}
 		darkness = darkness + distance/20;
@@ -111,7 +111,7 @@ class Renderer {
 		this.ctx.imageSmoothingEnabled = false;
 
 		this.ctx.drawImage(this.texturesImg,
-			tile.type.xImg + xTex*64, tile.type.yImg, 220/height, 64,
+			tile.type.xImg + xTex*63.5 - 110/height, tile.type.yImg, 220/height, 64,
 			scanline, 240-height/2, 3.6, height
 		);
 
