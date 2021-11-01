@@ -44,7 +44,7 @@ class Renderer {
 		this.zBuffer = [];
 
 		for(let i = -0.7; i <= 0.7; i += 0.007){
-			const offset = Math.atan(i/0.85);
+			const offset = Math.atan(i/0.9);
 			this.raycast(new Vector(
 				Math.cos(this.player.dir+offset),
 				Math.sin(this.player.dir+offset)
@@ -72,7 +72,7 @@ class Renderer {
 		const {distance, found, vIntersection, side, perpWallDist, vStep, vFound} = this.raycaster.raycast(vRayDir, vRayStart);
 
 		if(!found) {
-			this.zBuffer.push(100000);
+			this.zBuffer[angle] = 100000;
 			return;
 		}
 
@@ -97,7 +97,7 @@ class Renderer {
 		const foundTile:Tile = this.map[vFound.x][vFound.y];
 
 
-		this.zBuffer.push(distance);
+		this.zBuffer[angle] = distance;
 
 		this.drawLine(
 			Math.floor((scanline+0.7) * 458),
@@ -139,6 +139,7 @@ class Renderer {
 		let j = -1;
 		for (let i = -0.7; i < 0.7; i += 0.007) {
 			j++;
+			const offset = Math.atan(i/0.9);
 			const vDir = (new Vector(
 				Math.cos(this.player.dir + i),
 				Math.sin(this.player.dir + i)
@@ -148,8 +149,8 @@ class Renderer {
 
 			const scanline = (i + 0.7) * 458;
 
-			if (Math.abs(aDiff) < 0.48 * (1 / dist) && dist < this.zBuffer[j]) {
-				this.ctx.drawImage(spriteTexture, sprite.texture.xImg + ((aDiff * dist + 0.48) * 1.02 * 128), sprite.texture.yImg, 1, 128,
+			if (Math.abs(aDiff) < 0.44 * (1 / dist) && dist < this.zBuffer[offset]) {
+				this.ctx.drawImage(spriteTexture, sprite.texture.xImg + ((aDiff * dist + 0.44) * 1.12 * 128), sprite.texture.yImg, 1, 128,
 					scanline, 240 - (1 / dist * 400) / 2, 4, 1 / dist * 400);
 			}
 
