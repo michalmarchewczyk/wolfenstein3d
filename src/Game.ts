@@ -16,8 +16,8 @@ class Game {
 	private renderer: Renderer;
 	private rendererPreview:RendererPreview;
 	private tiles:Tile[] = [];
-	private player:Player;
-	private element:HTMLDivElement;
+	private readonly player:Player;
+	private readonly element:HTMLDivElement;
 	private keyboardController:KeyboardController = new KeyboardController();
 	private animationClock:AnimationClock;
 
@@ -50,7 +50,7 @@ class Game {
 				this.tiles.push(newTile);
 				const loaded = map[x]?.[y];
 				let type:TileType = tileTypes.null;
-				type = Object.values(tileTypes).find(type => type?.xImg === loaded?.type?.xImg && type?.yImg === loaded?.type?.yImg && type?.opaque === loaded?.type?.opaque) ?? type;
+				type = Object.values(tileTypes).find(t => t?.xImg === loaded?.type?.xImg && t?.yImg === loaded?.type?.yImg && t?.opaque === loaded?.type?.opaque) ?? type;
 				newTile.type = type;
 			}
 		}
@@ -67,6 +67,7 @@ class Game {
 	}
 
 	initControls() {
+		this.keyboardController.clearListeners();
 		this.keyboardController.addListener('w', 'down', () => {
 			this.player.speed = 4;
 		});
@@ -91,6 +92,7 @@ class Game {
 		this.keyboardController.addListener('d', 'up', () => {
 			this.player.rotationSpeed = 0;
 		});
+		this.keyboardController.focus();
 	}
 
 	render():HTMLDivElement {

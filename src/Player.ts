@@ -22,6 +22,9 @@ class Player {
 	rotate(dir:number):void {
 		this.dir += dir;
 		this.dir = (this.dir + 2 * Math.PI) % (2 * Math.PI);
+		if(this.dir > Math.PI){
+			this.dir = this.dir - 2 * Math.PI;
+		}
 	}
 
 

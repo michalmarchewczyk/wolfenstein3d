@@ -11,12 +11,13 @@ const PREVIEW_SIZE = 1000;
 class RendererPreview {
 	private canvas = document.createElement('canvas');
 	private ctx:CanvasRenderingContext2D;
-	private tileSize:number;
+	private readonly tileSize:number;
 	private raycaster:Raycaster;
 	private tileSelector = document.createElement('div');
 	private selectedIndex = 0;
 
 	constructor(private map:Tile[][], private tiles:Tile[], private player:Player, private sprites:Sprite[]){
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		this.ctx = this.canvas.getContext('2d')!;
 		this.canvas.width = PREVIEW_SIZE;
 		this.canvas.height = PREVIEW_SIZE;
@@ -181,12 +182,6 @@ class RendererPreview {
 		});
 
 		if(!tileFound) return;
-
-		// const currentIndex:number = Object.values(tileTypes).findIndex(v => v===tileFound.type);
-		//
-		// const newIndex = (currentIndex+1) % Object.values(tileTypes).length;
-		//
-		// tileFound.type = Object.values(tileTypes)[newIndex];
 
 		tileFound.type = Object.values(tileTypes)[this.selectedIndex];
 	}

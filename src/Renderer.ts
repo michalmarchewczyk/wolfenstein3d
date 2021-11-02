@@ -3,14 +3,14 @@ import Vector from '@src/Vector';
 import Tile from '@src/Tile';
 import Player from '@src/Player';
 import Raycaster from '@src/Raycaster';
-import Sprite from '@src/Sprite';
+import Sprite, {SpriteType} from '@src/Sprite';
 import {spriteTexture} from '@src/SpriteTexture';
 
 class Renderer {
-	private element:HTMLDivElement;
+	private readonly element:HTMLDivElement;
 	private canvas = document.createElement('canvas');
 	private ctx:CanvasRenderingContext2D;
-	private texturesImg: HTMLImageElement;
+	private readonly texturesImg: HTMLImageElement;
 	private raycaster:Raycaster;
 	private zBuffer:number[] = [];
 
@@ -18,6 +18,7 @@ class Renderer {
 		this.element = document.createElement('div');
 		this.element.appendChild(this.canvas);
 
+		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		this.ctx = this.canvas.getContext('2d')!;
 		this.canvas.width = 640;
 		this.canvas.height = 480;
@@ -80,10 +81,8 @@ class Renderer {
 		let xTex = 0;
 
 		if(side === 0 && vStep.x < 0){
-			darkness = 0;
 			xTex = 1 - (vIntersection.y - Math.floor(vIntersection.y));
 		}else if(side === 0 && vStep.x > 0){
-			darkness = 0;
 			xTex = vIntersection.y - Math.floor(vIntersection.y);
 		}else if(side === 1 && vStep.y < 0){
 			darkness = 0.8;
@@ -125,34 +124,139 @@ class Renderer {
 
 	drawSprites(){
 		this.sprites.forEach(sprite => {
-			this.drawSprite(sprite);
+			if(sprite.type === SpriteType.Normal){
+				this.drawSprite(sprite);
+			}else{
+				this.drawSpriteDirectional(sprite);
+			}
+
 		});
 	}
 
 	private drawSprite(sprite: Sprite) {
 		const dist = Math.sqrt((sprite.x - this.player.x) * (sprite.x - this.player.x) + (sprite.y - this.player.y) * (sprite.y - this.player.y));
 		const vSDir = (new Vector(
-			(sprite.x - this.player.x),
-			(sprite.y - this.player.y)
+			sprite.x - this.player.x,
+			sprite.y - this.player.y
 		)).normalized;
+		let diff = (this.player.dir) - (Math.atan2(vSDir.y, vSDir.x));
+		if(diff > Math.PI){
+			diff = diff - 2 * Math.PI;
+		}
+		if(diff < -1 * Math.PI){
+			diff = diff + 2 * Math.PI;
+		}
+		const scale = (1+Math.abs(diff/5));
 
-		let j = -1;
 		for (let i = -0.7; i < 0.7; i += 0.007) {
-			j++;
 			const offset = Math.atan(i/0.9);
-			const vDir = (new Vector(
-				Math.cos(this.player.dir + i),
-				Math.sin(this.player.dir + i)
-			)).normalized;
 
-			const aDiff = ((Math.atan2(vDir.y, vDir.x) + 4 * Math.PI) % (2 * Math.PI)) - ((Math.atan2(vSDir.y, vSDir.x) + 4 * Math.PI) % (2 * Math.PI));
+			let aDiff = (this.player.dir) + i - (Math.atan2(vSDir.y, vSDir.x));
+			if(aDiff > Math.PI){
+				aDiff = aDiff - 2 * Math.PI;
+			}
+			if(aDiff < -1 * Math.PI){
+				aDiff = aDiff + 2 * Math.PI;
+			}
 
 			const scanline = (i + 0.7) * 458;
 
-			if (Math.abs(aDiff) < 0.44 * (1 / dist) && dist < this.zBuffer[offset]) {
-				this.ctx.drawImage(spriteTexture, sprite.texture.xImg + ((aDiff * dist + 0.44) * 1.12 * 128), sprite.texture.yImg, 1, 128,
-					scanline, 240 - (1 / dist * 400) / 2, 4, 1 / dist * 400);
+			if (Math.abs(aDiff) < 0.44 * (1 / dist) * scale && dist < this.zBuffer[offset]) {
+				this.ctx.drawImage(spriteTexture, sprite.texture.xImg + ((aDiff * dist + 0.44 * scale) * 1.12 * 128 / scale), sprite.texture.yImg, 1, 128,
+					scanline, 240 - (scale / dist * 400) / 2, 4, scale / dist * 400);
 			}
+
+		}
+	}
+
+	private drawSpriteDirectional(sprite:Sprite){
+		const startPoint = new Vector(
+			sprite.x,
+			sprite.y
+		);
+		const endPoint = new Vector(
+			sprite.x,
+			sprite.y
+		);
+		if(sprite.type === SpriteType.EW){
+			startPoint.x -= 0.5;
+			endPoint.x += 0.5;
+		}else if(sprite.type === SpriteType.NS){
+			startPoint.y -= 0.5;
+			endPoint.y += 0.5;
+		}
+		const playerPoint = new Vector(
+			this.player.x,
+			this.player.y
+		);
+
+		for(let i = -0.7; i < 0.7; i+= 0.007){
+			const offset = Math.atan(i/0.9);
+			const vDir = new Vector(
+				Math.cos(this.player.dir + offset),
+				Math.sin(this.player.dir + offset)
+			);
+			const rayPoint = new Vector(
+				playerPoint.x + vDir.x * 200,
+				playerPoint.y + vDir.y * 200,
+			);
+
+			const a1 = endPoint.y - startPoint.y;
+			const b1 = startPoint.x - endPoint.x;
+			const c1 = a1 * startPoint.x + b1 * startPoint.y;
+
+			const a2 = rayPoint.y - playerPoint.y;
+			const b2 = playerPoint.x - rayPoint.x;
+			const c2 = a2 * playerPoint.x + b2 * playerPoint.y;
+
+			const det = a1 * b2 - a2 * b1;
+
+			if(det === 0){
+				return;
+			}
+
+			const x = (b2*c1-b1*c2)/det;
+			const y = (a1*c2-a2*c1)/det;
+
+			const scanline = (i + 0.7) * 458;
+
+			const dist = Math.sqrt((x-playerPoint.x)*(x-playerPoint.x) + (y-playerPoint.y)*(y-playerPoint.y));
+
+			const height = 400 / (dist * Math.cos(offset));
+
+			let minX = Math.min(startPoint.x, endPoint.x);
+			let maxX = Math.max(startPoint.x, endPoint.x);
+			let minY = Math.min(startPoint.y, endPoint.y);
+			let maxY = Math.max(startPoint.y, endPoint.y);
+			if(sprite.type === SpriteType.EW){
+				minX = minX+0.01;
+				maxX = maxX-0.01;
+			}else if(sprite.type === SpriteType.NS){
+				minY = minY+0.01;
+				maxY = maxY-0.01;
+			}
+
+
+			const minRX = Math.min(playerPoint.x, rayPoint.x);
+			const maxRX = Math.max(playerPoint.x, rayPoint.x);
+			const minRY = Math.min(playerPoint.y, rayPoint.y);
+			const maxRY = Math.max(playerPoint.y, rayPoint.y);
+
+			let xTex = 0;
+			if(sprite.type === SpriteType.EW){
+				xTex = (x-minX)/(maxX-minX);
+			}else if(sprite.type === SpriteType.NS){
+				xTex = (y-minY)/(maxY-minY);
+			}
+
+			if(x >= minX && x <= maxX && y >= minY && y <= maxY && dist <= this.zBuffer[offset] &&
+				x >= minRX && x <= maxRX && y >= minRY && y <= maxRY){
+				this.ctx.drawImage(spriteTexture,
+					sprite.texture.xImg + xTex*128 - 110/height, sprite.texture.yImg, 220/height, 128,
+					scanline, 240-height/2, 4, height
+				);
+			}
+
 
 		}
 	}

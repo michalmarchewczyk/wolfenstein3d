@@ -49,8 +49,7 @@ class Vector {
 	}
 
 	clone():Vector {
-		const result = new Vector(this.x, this.y);
-		return result;
+		return new Vector(this.x, this.y);
 	}
 
 }

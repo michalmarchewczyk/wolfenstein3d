@@ -24,7 +24,6 @@ export default class KeyboardController {
 		});
 		this.attach.addEventListener('keydown', (e) => {
 			e.preventDefault();
-			// console.log(e.key);
 			this.listeners
 				.filter(l => l.type === 'press')
 				.filter(l => l.key === e.key.toLowerCase())
@@ -42,7 +41,6 @@ export default class KeyboardController {
 		});
 		this.attach.addEventListener('keyup', (e) => {
 			e.preventDefault();
-			// console.log(e.key);
 			this.listeners
 				.filter(l => l.type === 'up')
 				.filter(l => l.key === e.key.toLowerCase())
@@ -59,7 +57,7 @@ export default class KeyboardController {
 		});
 	}
 
-	addListener(key:string, type:'press'|'down'|'up' = 'down', callback:() => void) {
+	addListener(key:string, type:'press'|'down'|'up' = 'down', callback:() => void = () => {return;}) {
 		this.listeners.push({
 			key,
 			callback,
