@@ -5,6 +5,7 @@ import Player from '@src/Player';
 import Raycaster from '@src/Raycaster';
 import Sprite, {SpriteType} from '@src/Sprite';
 import {spriteTexture} from '@src/SpriteTexture';
+import Entity from '@src/Entity';
 
 class Renderer {
 	private readonly element:HTMLDivElement;
@@ -14,7 +15,7 @@ class Renderer {
 	private raycaster:Raycaster;
 	private zBuffer:number[] = [];
 
-	constructor(private map:Tile[][], private tiles:Tile[], private player:Player, private sprites:Sprite[]){
+	constructor(private map:Tile[][], private tiles:Tile[], private player:Player, private sprites:Sprite[], private entities:Entity[] = []){
 		this.element = document.createElement('div');
 		this.element.appendChild(this.canvas);
 
@@ -129,7 +130,16 @@ class Renderer {
 			}else{
 				this.drawSpriteDirectional(sprite);
 			}
+		});
 
+		this.entities.forEach(entity => {
+			entity.sprites.forEach(sprite => {
+				if(sprite.type === SpriteType.Normal){
+					this.drawSprite(sprite);
+				}else{
+					this.drawSpriteDirectional(sprite);
+				}
+			});
 		});
 	}
 
@@ -231,9 +241,13 @@ class Renderer {
 			if(sprite.type === SpriteType.EW){
 				minX = minX+0.01;
 				maxX = maxX-0.01;
+				minY = minY-0.05;
+				maxY = maxY+0.05;
 			}else if(sprite.type === SpriteType.NS){
 				minY = minY+0.01;
 				maxY = maxY-0.01;
+				minX = minX-0.05;
+				maxX = maxX+0.05;
 			}
 
 
@@ -251,6 +265,7 @@ class Renderer {
 
 			if(x >= minX && x <= maxX && y >= minY && y <= maxY && dist <= this.zBuffer[offset] &&
 				x >= minRX && x <= maxRX && y >= minRY && y <= maxRY){
+				this.zBuffer[offset] = dist;
 				this.ctx.drawImage(spriteTexture,
 					sprite.texture.xImg + xTex*128 - 110/height, sprite.texture.yImg, 220/height, 128,
 					scanline, 240-height/2, 4, height

@@ -5,6 +5,7 @@ import Raycaster from '@src/Raycaster';
 import {tileTexture, tileTypes} from '@src/TileType';
 import Sprite from '@src/Sprite';
 import {spriteTexture} from '@src/SpriteTexture';
+import Entity from '@src/Entity';
 
 const PREVIEW_SIZE = 1000;
 
@@ -16,7 +17,7 @@ class RendererPreview {
 	private tileSelector = document.createElement('div');
 	private selectedIndex = 0;
 
-	constructor(private map:Tile[][], private tiles:Tile[], private player:Player, private sprites:Sprite[]){
+	constructor(private map:Tile[][], private tiles:Tile[], private player:Player, private sprites:Sprite[], private entities:Entity[] = []){
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		this.ctx = this.canvas.getContext('2d')!;
 		this.canvas.width = PREVIEW_SIZE;
@@ -57,6 +58,14 @@ class RendererPreview {
 			this.ctx.drawImage(spriteTexture, sprite.texture.xImg, sprite.texture.yImg, 128, 128,
 				(sprite.x-0.5) * this.tileSize, (sprite.y-0.5)*this.tileSize, this.tileSize, this.tileSize);
 		});
+
+		this.entities.forEach(entity => {
+			entity.sprites.slice(0,1).forEach(sprite => {
+				this.ctx.drawImage(spriteTexture, sprite.texture.xImg, sprite.texture.yImg, 128, 128,
+					(sprite.x-0.5) * this.tileSize, (sprite.y-0.5)*this.tileSize, this.tileSize, this.tileSize);
+			});
+		});
+
 
 		window.requestAnimationFrame(() => {
 			this.draw();
