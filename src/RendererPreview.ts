@@ -1,6 +1,6 @@
 import Tile from '@src/Tile';
 import Player from '@src/Player';
-import Vector from '@src/Vector';
+import Vector from '@src/utils/Vector';
 import Raycaster from '@src/Raycaster';
 import {tileTexture, tileTypes} from '@src/TileType';
 import Sprite from '@src/Sprite';

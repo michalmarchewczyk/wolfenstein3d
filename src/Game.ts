@@ -1,14 +1,14 @@
 import Tile from '@src/Tile';
 import RendererPreview from '@src/RendererPreview';
-import KeyboardController from '@src/KeyboardController';
+import KeyboardController from '@src/utils/KeyboardController';
 import Player from '@src/Player';
-import AnimationClock from '@src/AnimationClock';
+import AnimationClock from '@src/utils/AnimationClock';
 import Renderer from '@src/Renderer';
 import TileType, {tileTypes} from '@src/TileType';
 import Sprite from '@src/Sprite';
 import map from './maps/map1.json';
 import Entity from '@src/Entity';
-import Door from '@src/Door';
+import {sprites, entities} from '@src/maps/map1';
 
 
 class Game {
@@ -62,8 +62,8 @@ class Game {
 			}
 		}
 
-		this.entities.push(new Door(33.5, 49.5));
-		this.entities.push(new Door(35.5, 49.5));
+		this.sprites = sprites;
+		this.entities = entities;
 	}
 
 	tick(){

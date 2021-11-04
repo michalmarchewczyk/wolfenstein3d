@@ -1,5 +1,5 @@
 import textures from './assets/textures.png';
-import Vector from '@src/Vector';
+import Vector from '@src/utils/Vector';
 import Tile from '@src/Tile';
 import Player from '@src/Player';
 import Raycaster from '@src/Raycaster';
@@ -23,6 +23,7 @@ class Renderer {
 		this.ctx = this.canvas.getContext('2d')!;
 		this.canvas.width = 640;
 		this.canvas.height = 480;
+		this.canvas.classList.add('mainView');
 
 		this.texturesImg = new Image();
 		this.texturesImg.src = textures;
@@ -82,14 +83,14 @@ class Renderer {
 		let xTex = 0;
 
 		if(side === 0 && vStep.x < 0){
+			darkness = 0.6;
 			xTex = 1 - (vIntersection.y - Math.floor(vIntersection.y));
 		}else if(side === 0 && vStep.x > 0){
+			darkness = 0.6;
 			xTex = vIntersection.y - Math.floor(vIntersection.y);
 		}else if(side === 1 && vStep.y < 0){
-			darkness = 0.8;
 			xTex = vIntersection.x - Math.floor(vIntersection.x);
 		}else if(side === 1 && vStep.y > 0){
-			darkness = 0.8;
 			xTex = 1 - (vIntersection.x - Math.floor(vIntersection.x));
 		}
 		darkness = darkness + distance/20;
@@ -266,12 +267,14 @@ class Renderer {
 			if(x >= minX && x <= maxX && y >= minY && y <= maxY && dist <= this.zBuffer[offset] &&
 				x >= minRX && x <= maxRX && y >= minRY && y <= maxRY){
 				this.zBuffer[offset] = dist;
+				this.ctx.imageSmoothingEnabled = false;
+
 				this.ctx.drawImage(spriteTexture,
-					sprite.texture.xImg + xTex*128 - 110/height, sprite.texture.yImg, 220/height, 128,
-					scanline, 240-height/2, 4, height
+					sprite.texture.xImg + xTex*127 - 55/height, sprite.texture.yImg, 110/height, 128,
+					scanline, 240-height/2, 3.6, height
 				);
 				let darkness = 0;
-				if(sprite.type === SpriteType.EW){
+				if(sprite.type === SpriteType.NS){
 					darkness = 0.4;
 				}
 				darkness = darkness + dist/20;

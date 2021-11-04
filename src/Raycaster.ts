@@ -1,4 +1,4 @@
-import Vector from '@src/Vector';
+import Vector from '@src/utils/Vector';
 
 interface RaycasterResult {
 	distance: number,
