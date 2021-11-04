@@ -270,6 +270,18 @@ class Renderer {
 					sprite.texture.xImg + xTex*128 - 110/height, sprite.texture.yImg, 220/height, 128,
 					scanline, 240-height/2, 4, height
 				);
+				let darkness = 0;
+				if(sprite.type === SpriteType.EW){
+					darkness = 0.4;
+				}
+				darkness = darkness + dist/20;
+				this.ctx.beginPath();
+				this.ctx.fillStyle = '#000000';
+				this.ctx.globalAlpha = darkness/2;
+				this.ctx.rect(scanline-1, 240-height/2, 3.33, height);
+				this.ctx.fill();
+				this.ctx.globalAlpha = 1;
+
 			}
 
 
