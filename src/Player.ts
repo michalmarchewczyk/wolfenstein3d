@@ -10,11 +10,11 @@ class Player {
 
 	move(x:number, y:number):void {
 		this.x += x;
-		if(this.checkWall(this.x, this.y) || this.checkWall(this.x-COLLISION_PADDING, this.y) || this.checkWall(this.x+COLLISION_PADDING, this.y)){
+		if(this.checkWall(this.x, this.y) || this.checkWall(this.x + COLLISION_PADDING * Math.sign(x), this.y)){
 			this.x -= x;
 		}
 		this.y += y;
-		if(this.checkWall(this.x, this.y) || this.checkWall(this.x, this.y-COLLISION_PADDING) || this.checkWall(this.x, this.y+COLLISION_PADDING)){
+		if(this.checkWall(this.x, this.y) || this.checkWall(this.x, this.y + COLLISION_PADDING * Math.sign(y))){
 			this.y -= y;
 		}
 	}
