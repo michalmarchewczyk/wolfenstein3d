@@ -6,6 +6,7 @@ import Raycaster from '@src/Raycaster';
 import Sprite, {SpriteType} from '@src/Sprite';
 import {spriteTexture, spriteTextureMirrored} from '@src/SpriteTexture';
 import Entity from '@src/Entity';
+import {BLOCK_HEIGHT, FOV, HORIZONTAL_RESOLUTION} from '@src/settings';
 
 class Renderer {
 	private readonly element:HTMLDivElement;
@@ -48,7 +49,7 @@ class Renderer {
 
 		this.zBuffer = [];
 
-		for(let i = -0.7; i <= 0.7; i += 0.007){
+		for(let i = FOV/-2; i <= FOV/2; i += FOV/HORIZONTAL_RESOLUTION){
 			const offset = Math.atan(i/0.9);
 			this.raycast(new Vector(
 				Math.cos(this.player.dir+offset),
@@ -103,8 +104,8 @@ class Renderer {
 		this.zBuffer[angle] = distance;
 
 		this.drawLine(
-			Math.floor((scanline+0.7) * 458),
-			400 / (perpWallDist * Math.cos(angle)),
+			Math.round((scanline+FOV/2) * (640/FOV)),
+			BLOCK_HEIGHT / (perpWallDist * Math.cos(angle)),
 			darkness,
 			xTex,
 			foundTile);
@@ -112,28 +113,22 @@ class Renderer {
 
 	drawLine(scanline: number, height: number, darkness: number, xTex:number, tile:Tile):void {
 
+		const scaling = 33600/HORIZONTAL_RESOLUTION;
+
 		this.ctx.drawImage(this.texturesImg,
-			tile.type.xImg + xTex*63.5 - 110/height, tile.type.yImg, 220/height, 64,
-			scanline, 240-height/2, 3.6, height
+			tile.type.xImg + xTex*63 - (scaling/2)/height + 1, tile.type.yImg, scaling/height, 64,
+			Math.floor(scanline), 240-height/2, 640/HORIZONTAL_RESOLUTION, height
 		);
 
 		this.ctx.globalAlpha = darkness/2;
 		this.ctx.beginPath();
 		this.ctx.fillStyle = '#000000';
-		this.ctx.rect(scanline, 240-height/2, 4, height);
+		this.ctx.rect(scanline, 240-height/2, 640/HORIZONTAL_RESOLUTION, height);
 		this.ctx.fill();
 		this.ctx.globalAlpha = 1;
 	}
 
 	drawSprites(){
-		this.sprites.forEach(sprite => {
-			if(sprite.type === SpriteType.Normal){
-				this.drawSprite(sprite);
-			}else{
-				this.drawSpriteDirectional(sprite);
-			}
-		});
-
 		this.entities.forEach(entity => {
 			entity.sprites.forEach(sprite => {
 				if(sprite.type === SpriteType.Normal){
@@ -142,6 +137,14 @@ class Renderer {
 					this.drawSpriteDirectional(sprite);
 				}
 			});
+		});
+
+		this.sprites.forEach(sprite => {
+			if(sprite.type === SpriteType.Normal){
+				this.drawSprite(sprite);
+			}else{
+				this.drawSpriteDirectional(sprite);
+			}
 		});
 	}
 
@@ -156,7 +159,7 @@ class Renderer {
 
 		const scale = (1+Math.abs(diff/5));
 
-		for (let i = -0.7; i < 0.7; i += 0.007) {
+		for(let i = FOV/-2; i <= FOV/2; i += FOV/HORIZONTAL_RESOLUTION){
 			const offset = Math.atan(i/0.9);
 
 			if(dist >= this.zBuffer[offset]){
@@ -167,11 +170,14 @@ class Renderer {
 
 			aDiff = (aDiff + 3*Math.PI) % (2*Math.PI) - Math.PI;
 
-			const scanline = (i + 0.7) * 458;
+			const scanline = Math.round((i+FOV/2) * (640/FOV));
+
+			const height = scale / dist * BLOCK_HEIGHT;
 
 			if (Math.abs(aDiff) < 0.44 * (1 / dist) * scale) {
-				this.ctx.drawImage(spriteTexture, sprite.texture.xImg + ((aDiff * dist + 0.44 * scale) * 1.12 * 128 / scale), sprite.texture.yImg, 1, 128,
-					scanline, 240 - (scale / dist * 400) / 2, 4, scale / dist * 400);
+				this.ctx.drawImage(spriteTexture, sprite.texture.xImg + ((aDiff * dist + 0.44 * scale) * 1.12 * 128 / scale),
+					sprite.texture.yImg, 1, 128,
+					scanline, 240 - height / 2, 640/HORIZONTAL_RESOLUTION, height);
 			}
 
 		}
@@ -198,7 +204,7 @@ class Renderer {
 			this.player.y
 		);
 
-		for(let i = -0.7; i < 0.7; i+= 0.007){
+		for(let i = FOV/-2; i <= FOV/2; i += FOV/HORIZONTAL_RESOLUTION){
 			const offset = Math.atan(i/0.9);
 			const vDir = new Vector(
 				Math.cos(this.player.dir + offset),
@@ -226,7 +232,7 @@ class Renderer {
 			const x = (b2*c1-b1*c2)/det;
 			const y = (a1*c2-a2*c1)/det;
 
-			const scanline = (i + 0.7) * 458;
+			const scanline = Math.round((i+FOV/2) * (640/FOV));
 
 			const dist = Math.sqrt((x-playerPoint.x)*(x-playerPoint.x) + (y-playerPoint.y)*(y-playerPoint.y));
 
@@ -234,7 +240,7 @@ class Renderer {
 				continue;
 			}
 
-			const height = 400 / (dist * Math.cos(offset));
+			const height = BLOCK_HEIGHT / (dist * Math.cos(offset));
 
 			let minX = Math.min(startPoint.x, endPoint.x);
 			let maxX = Math.max(startPoint.x, endPoint.x);
@@ -275,9 +281,11 @@ class Renderer {
 				x >= minRX && x <= maxRX && y >= minRY && y <= maxRY){
 				this.zBuffer[offset] = dist;
 
+				const scaling = 67200/HORIZONTAL_RESOLUTION;
+
 				this.ctx.drawImage(texture,
-					sprite.texture.xImg + xTex*127 - 220/height, sprite.texture.yImg, 440/height, 128,
-					scanline, 240-height/2, 3.6, height
+					sprite.texture.xImg + xTex*127 - (scaling/2)/height, sprite.texture.yImg, (scaling)/height, 128,
+					scanline, 240-height/2, 640/HORIZONTAL_RESOLUTION, height
 				);
 				let darkness = 0;
 				if(sprite.type === SpriteType.NS){
@@ -287,7 +295,7 @@ class Renderer {
 				this.ctx.beginPath();
 				this.ctx.fillStyle = '#000000';
 				this.ctx.globalAlpha = darkness/2;
-				this.ctx.rect(scanline-1, 240-height/2, 3.33, height);
+				this.ctx.rect(scanline, 240-height/2, 640/HORIZONTAL_RESOLUTION, height);
 				this.ctx.fill();
 				this.ctx.globalAlpha = 1;
 

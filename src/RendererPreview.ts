@@ -6,8 +6,7 @@ import {tileTexture, tileTypes} from '@src/TileType';
 import Sprite from '@src/Sprite';
 import {spriteTexture} from '@src/SpriteTexture';
 import Entity from '@src/Entity';
-
-const PREVIEW_SIZE = 1000;
+import {FOV, HORIZONTAL_RESOLUTION, PREVIEW_SIZE} from '@src/settings';
 
 class RendererPreview {
 	private canvasDynamic = document.createElement('canvas');
@@ -70,7 +69,7 @@ class RendererPreview {
 		this.ctxD.beginPath();
 		this.ctxD.fillStyle = '#4eb830';
 		this.ctxD.strokeStyle = '#b7f1a6';
-		for(let i = -0.7; i <= 0.7; i += 0.007){
+		for(let i = FOV/-2; i <= FOV/2; i += FOV/HORIZONTAL_RESOLUTION){
 			const offset = Math.atan(i/0.9);
 			this.raycast(new Vector(
 				Math.cos(this.player.dir+offset),
