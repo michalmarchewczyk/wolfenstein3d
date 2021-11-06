@@ -26,13 +26,16 @@ class Game {
 
 	constructor(){
 		this.player = new Player(30.5, 49.5, 0, (x,y) => {
-			return !!(this.tiles
+			const foundTile = this.tiles
 				.filter(t => t.x === Math.floor(x) && t.y === Math.floor(y))
-				.find(t => t.type.opaque) ||
-					this.entities
-						.filter(e => Math.floor(e.x) === Math.floor(x) && Math.floor(e.y) === Math.floor(y))
-						.find(e => e.collision)
-			);
+				.find(t => t.type.opaque);
+			const foundEntity = this.entities
+				.filter(e => Math.floor(e.x) === Math.floor(x) && Math.floor(e.y) === Math.floor(y))
+				.find(e => e.collision);
+			const foundSprite = this.sprites
+				.filter(s => Math.floor(s.x) === Math.floor(x) && Math.floor(s.y) === Math.floor(y))
+				.find(s => s.collision);
+			return (foundTile !== undefined || foundEntity !== undefined || foundSprite !== undefined);
 		});
 		this.initMap();
 		this.element = document.createElement('div');

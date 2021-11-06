@@ -7,7 +7,13 @@ enum SpriteType {
 }
 
 class Sprite {
-	constructor(public x:number, public y:number, public texture:SpriteTexture = spriteTextures.lamp3, public type:SpriteType = SpriteType.Normal){
+	constructor(
+		public x:number,
+		public y:number,
+		public texture:SpriteTexture = spriteTextures.lamp3,
+		public collision:boolean = false,
+		public type:SpriteType = SpriteType.Normal
+	){
 
 	}
 }

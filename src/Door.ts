@@ -10,13 +10,13 @@ class Door implements Entity {
 
 	constructor(public x:number = 0, public y:number = 0, public direction:'NS'|'EW' = 'NS', public collision: boolean = true, public sprites:Sprite[] = []){
 		if(this.direction === 'NS'){
-			this.sprites.push(new Sprite(this.x, this.y, spriteTextures.door, SpriteType.NS));
-			this.sprites.push(new Sprite(this.x, this.y+0.49, spriteTextures.door2, SpriteType.EW));
-			this.sprites.push(new Sprite(this.x, this.y-0.49, spriteTextures.door2, SpriteType.EW));
+			this.sprites.push(new Sprite(this.x, this.y, spriteTextures.door, false, SpriteType.NS));
+			this.sprites.push(new Sprite(this.x, this.y+0.49, spriteTextures.door2, false, SpriteType.EW));
+			this.sprites.push(new Sprite(this.x, this.y-0.49, spriteTextures.door2, false, SpriteType.EW));
 		}else{
-			this.sprites.push(new Sprite(this.x, this.y, spriteTextures.door, SpriteType.EW));
-			this.sprites.push(new Sprite(this.x+0.49, this.y, spriteTextures.door2, SpriteType.NS));
-			this.sprites.push(new Sprite(this.x-0.49, this.y, spriteTextures.door2, SpriteType.NS));
+			this.sprites.push(new Sprite(this.x, this.y, spriteTextures.door, false, SpriteType.EW));
+			this.sprites.push(new Sprite(this.x+0.49, this.y, spriteTextures.door2, false, SpriteType.NS));
+			this.sprites.push(new Sprite(this.x-0.49, this.y, spriteTextures.door2, false, SpriteType.NS));
 		}
 		this.activate = () => {
 			if(this.timeout){
