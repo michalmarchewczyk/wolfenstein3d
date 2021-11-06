@@ -3,6 +3,7 @@ const COLLISION_PADDING = 0.2;
 class Player {
 	public speed = 0;
 	public rotationSpeed = 0;
+	public speedMultiplier = 1;
 
 	constructor(public x = 5.5, public y = 5.5, public dir:number = 0, public checkWall:(x:number,y:number)=>boolean = ()=>false){
 
@@ -31,8 +32,8 @@ class Player {
 	tick(delta:number){
 		this.rotate(this.rotationSpeed * delta);
 		this.move(
-			Math.cos(this.dir) * this.speed * delta,
-			Math.sin(this.dir) * this.speed * delta,
+			Math.cos(this.dir) * this.speed * this.speedMultiplier * delta,
+			Math.sin(this.dir) * this.speed * this.speedMultiplier * delta,
 		);
 	}
 }

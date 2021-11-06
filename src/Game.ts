@@ -108,6 +108,12 @@ class Game {
 		this.keyboardController.addListener('d', 'up', () => {
 			this.player.rotationSpeed = 0;
 		});
+		this.keyboardController.addListener('shift', 'down', () => {
+			this.player.speedMultiplier = 2;
+		});
+		this.keyboardController.addListener('shift', 'up', () => {
+			this.player.speedMultiplier = 1;
+		});
 		this.keyboardController.addListener(' ', 'down', () => {
 			const nearestEntity = this.entities.filter(e => {
 				const dist = Math.sqrt((this.player.x-e.x)*(this.player.x-e.x)+(this.player.y-e.y)*(this.player.y-e.y));
@@ -117,7 +123,7 @@ class Game {
 				const distB = Math.sqrt((this.player.x-b.x)*(this.player.x-b.x)+(this.player.y-b.y)*(this.player.y-b.y));
 				return distA - distB;
 			})[0];
-			nearestEntity.activate();
+			nearestEntity?.activate();
 		});
 		this.keyboardController.focus();
 	}
