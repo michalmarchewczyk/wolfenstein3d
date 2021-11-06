@@ -4,7 +4,7 @@ import Tile from '@src/Tile';
 import Player from '@src/Player';
 import Raycaster from '@src/Raycaster';
 import Sprite, {SpriteType} from '@src/Sprite';
-import {spriteTexture} from '@src/SpriteTexture';
+import {spriteTexture, spriteTextureMirrored} from '@src/SpriteTexture';
 import Entity from '@src/Entity';
 
 class Renderer {
@@ -265,12 +265,18 @@ class Renderer {
 				xTex = (y-minY)/(maxY-minY);
 			}
 
+			let texture = spriteTexture;
+			if((sprite.type === SpriteType.EW && vDir.y > 0) || (sprite.type === SpriteType.NS && vDir.x < 0)){
+				xTex = 1 - xTex;
+				texture = spriteTextureMirrored;
+			}
+
 			if(x >= minX && x <= maxX && y >= minY && y <= maxY &&
 				x >= minRX && x <= maxRX && y >= minRY && y <= maxRY){
 				this.zBuffer[offset] = dist;
 
-				this.ctx.drawImage(spriteTexture,
-					sprite.texture.xImg + xTex*127 - 55/height, sprite.texture.yImg, 110/height, 128,
+				this.ctx.drawImage(texture,
+					sprite.texture.xImg + xTex*127 - 220/height, sprite.texture.yImg, 440/height, 128,
 					scanline, 240-height/2, 3.6, height
 				);
 				let darkness = 0;

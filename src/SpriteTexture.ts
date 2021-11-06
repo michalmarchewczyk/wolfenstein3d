@@ -1,4 +1,5 @@
 import sprites from './assets/sprites.png';
+import spritesMirrored from './assets/spritesMirrored.png';
 
 class SpriteTexture {
 	constructor(
@@ -23,4 +24,7 @@ export const spriteTextures = {
 const spriteTexture = new Image();
 spriteTexture.src = sprites;
 
-export {spriteTexture};
+const spriteTextureMirrored = new Image();
+spriteTextureMirrored.src = spritesMirrored;
+
+export {spriteTexture, spriteTextureMirrored};
