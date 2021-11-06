@@ -20,7 +20,7 @@ class Renderer {
 		this.element.appendChild(this.canvas);
 
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		this.ctx = this.canvas.getContext('2d')!;
+		this.ctx = this.canvas.getContext('2d', {alpha: false})!;
 		this.canvas.width = 640;
 		this.canvas.height = 480;
 		this.canvas.classList.add('mainView');
@@ -38,6 +38,8 @@ class Renderer {
 	}
 
 	draw():void {
+		this.ctx.imageSmoothingEnabled = false;
+
 		this.ctx.fillStyle = '#7a7a7a';
 		this.ctx.fillRect(0, 0, 640, 480);
 		this.ctx.fillStyle = '#383838';
@@ -109,7 +111,6 @@ class Renderer {
 	}
 
 	drawLine(scanline: number, height: number, darkness: number, xTex:number, tile:Tile):void {
-		this.ctx.imageSmoothingEnabled = false;
 
 		this.ctx.drawImage(this.texturesImg,
 			tile.type.xImg + xTex*63.5 - 110/height, tile.type.yImg, 220/height, 64,
@@ -151,28 +152,24 @@ class Renderer {
 			sprite.y - this.player.y
 		)).normalized;
 		let diff = (this.player.dir) - (Math.atan2(vSDir.y, vSDir.x));
-		if(diff > Math.PI){
-			diff = diff - 2 * Math.PI;
-		}
-		if(diff < -1 * Math.PI){
-			diff = diff + 2 * Math.PI;
-		}
+		diff = (diff + 3*Math.PI) % (2*Math.PI) - Math.PI;
+
 		const scale = (1+Math.abs(diff/5));
 
 		for (let i = -0.7; i < 0.7; i += 0.007) {
 			const offset = Math.atan(i/0.9);
 
+			if(dist >= this.zBuffer[offset]){
+				continue;
+			}
+
 			let aDiff = (this.player.dir) + i - (Math.atan2(vSDir.y, vSDir.x));
-			if(aDiff > Math.PI){
-				aDiff = aDiff - 2 * Math.PI;
-			}
-			if(aDiff < -1 * Math.PI){
-				aDiff = aDiff + 2 * Math.PI;
-			}
+
+			aDiff = (aDiff + 3*Math.PI) % (2*Math.PI) - Math.PI;
 
 			const scanline = (i + 0.7) * 458;
 
-			if (Math.abs(aDiff) < 0.44 * (1 / dist) * scale && dist < this.zBuffer[offset]) {
+			if (Math.abs(aDiff) < 0.44 * (1 / dist) * scale) {
 				this.ctx.drawImage(spriteTexture, sprite.texture.xImg + ((aDiff * dist + 0.44 * scale) * 1.12 * 128 / scale), sprite.texture.yImg, 1, 128,
 					scanline, 240 - (scale / dist * 400) / 2, 4, scale / dist * 400);
 			}
@@ -233,6 +230,10 @@ class Renderer {
 
 			const dist = Math.sqrt((x-playerPoint.x)*(x-playerPoint.x) + (y-playerPoint.y)*(y-playerPoint.y));
 
+			if(dist >= this.zBuffer[offset]){
+				continue;
+			}
+
 			const height = 400 / (dist * Math.cos(offset));
 
 			let minX = Math.min(startPoint.x, endPoint.x);
@@ -264,10 +265,9 @@ class Renderer {
 				xTex = (y-minY)/(maxY-minY);
 			}
 
-			if(x >= minX && x <= maxX && y >= minY && y <= maxY && dist <= this.zBuffer[offset] &&
+			if(x >= minX && x <= maxX && y >= minY && y <= maxY &&
 				x >= minRX && x <= maxRX && y >= minRY && y <= maxRY){
 				this.zBuffer[offset] = dist;
-				this.ctx.imageSmoothingEnabled = false;
 
 				this.ctx.drawImage(spriteTexture,
 					sprite.texture.xImg + xTex*127 - 55/height, sprite.texture.yImg, 110/height, 128,

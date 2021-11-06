@@ -31,7 +31,7 @@ class Raycaster {
 
 
 		let bTileFound = false;
-		const fMaxDistance = 200;
+		const fMaxDistance = 100;
 		let fDistance = 0;
 		let side = 0;
 		let vFound = new Vector(0,0);

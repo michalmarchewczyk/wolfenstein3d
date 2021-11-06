@@ -12,8 +12,16 @@ canvas {
   image-rendering: pixelated;
 
   &.mainView {
-    width: 960px;
-    height: 720px;
+    width: calc(640px * 1.2);
+    height: calc(480px * 1.2);
+  }
+
+  &.previewDynamic {
+   position: relative;
+  }
+
+  &.previewStatic {
+   position: absolute;
   }
 }
 
