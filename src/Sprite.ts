@@ -10,7 +10,7 @@ class Sprite {
 	constructor(
 		public x:number,
 		public y:number,
-		public texture:SpriteTexture = spriteTextures.lamp3,
+		public texture:SpriteTexture = spriteTextures.debug,
 		public collision:boolean = false,
 		public type:SpriteType = SpriteType.Normal
 	){

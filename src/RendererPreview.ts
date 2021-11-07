@@ -62,7 +62,7 @@ class RendererPreview {
 	}
 
 	draw():void{
-		this.ctxD.fillStyle = '#aaaaaa';
+		this.ctxD.fillStyle = '#111111';
 		this.ctxD.clearRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
 		this.drawPlayer();
 
@@ -156,10 +156,11 @@ class RendererPreview {
 
 	private drawTiles() {
 		this.ctxS.beginPath();
-		this.ctxS.strokeStyle = '#dddddd';
+		this.ctxS.strokeStyle = '#444444';
+		this.ctxS.lineWidth = 0.5;
 
 		this.tiles.forEach(tile => {
-			this.ctxS.fillStyle = '#c2c2c2';
+			this.ctxS.fillStyle = '#111111';
 			if (tile.type.opaque) {
 				this.ctxS.fillStyle = '#134ac2';
 			}
