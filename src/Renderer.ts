@@ -247,15 +247,15 @@ class Renderer {
 			let minY = Math.min(startPoint.y, endPoint.y);
 			let maxY = Math.max(startPoint.y, endPoint.y);
 			if(sprite.type === SpriteType.EW){
-				minX = minX+0.005;
-				maxX = maxX-0.005;
-				minY = minY-0.01;
-				maxY = maxY+0.01;
+				minX = minX+0.001;
+				maxX = maxX-0.001;
+				minY = minY-0.004;
+				maxY = maxY+0.004;
 			}else if(sprite.type === SpriteType.NS){
-				minY = minY+0.005;
-				maxY = maxY-0.005;
-				minX = minX-0.01;
-				maxX = maxX+0.01;
+				minY = minY+0.001;
+				maxY = maxY-0.001;
+				minX = minX-0.004;
+				maxX = maxX+0.004;
 			}
 
 

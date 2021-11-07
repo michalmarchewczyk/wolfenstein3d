@@ -42,6 +42,11 @@ export const spriteTextures = {
 	goldBox: new SpriteTexture(387, 774),
 	greenBarrel: new SpriteTexture(387, 0),
 	face: new SpriteTexture(0, 903),
+
+	stoneWall: new SpriteTexture(0, 1290),
+	stoneWall4: new SpriteTexture(0, 1161),
+	woodWall2: new SpriteTexture(0, 1032),
+
 };
 
 const spriteTexture = new Image();

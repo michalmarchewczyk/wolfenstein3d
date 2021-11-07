@@ -4,11 +4,12 @@ import {spriteTextures} from '@src/SpriteTexture';
 
 class Door implements Entity {
 	public state = 1;
-	public changing = false;
-	public activate:() => void = () => {return;};
+	private changing = false;
 	public timeout:NodeJS.Timeout|null = null;
+    public sprites:Sprite[] = [];
+	public collision = true;
 
-	constructor(public x:number = 0, public y:number = 0, public direction:'NS'|'EW' = 'NS', public collision: boolean = true, public sprites:Sprite[] = []){
+	constructor(public x:number = 0, public y:number = 0, public direction:'NS'|'EW' = 'NS'){
 		if(this.direction === 'NS'){
 			this.sprites.push(new Sprite(this.x, this.y, spriteTextures.door, false, SpriteType.NS));
 			this.sprites.push(new Sprite(this.x, this.y+0.49, spriteTextures.door2, false, SpriteType.EW));
@@ -18,13 +19,14 @@ class Door implements Entity {
 			this.sprites.push(new Sprite(this.x+0.49, this.y, spriteTextures.door2, false, SpriteType.NS));
 			this.sprites.push(new Sprite(this.x-0.49, this.y, spriteTextures.door2, false, SpriteType.NS));
 		}
-		this.activate = () => {
-			if(this.timeout){
-				clearTimeout(this.timeout);
-			}
-			if(this.changing) return;
-			this.changing = true;
-		};
+	}
+
+	public activate() {
+		if(this.timeout){
+			clearTimeout(this.timeout);
+		}
+		if(this.changing) return;
+		this.changing = true;
 	}
 
 	public tick(delta:number){

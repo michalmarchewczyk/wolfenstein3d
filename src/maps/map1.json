@@ -5839,8 +5839,8 @@
       "y": 6,
       "type": {
         "xImg": 0,
-        "yImg": 64,
-        "opaque": true
+        "yImg": 0,
+        "opaque": false
       }
     },
     {
@@ -16901,9 +16901,9 @@
       "x": 29,
       "y": 15,
       "type": {
-        "xImg": 256,
-        "yImg": 192,
-        "opaque": true
+        "xImg": 0,
+        "yImg": 0,
+        "opaque": false
       }
     },
     {
@@ -18058,8 +18058,8 @@
       "y": 15,
       "type": {
         "xImg": 0,
-        "yImg": 192,
-        "opaque": true
+        "yImg": 0,
+        "opaque": false
       }
     },
     {
