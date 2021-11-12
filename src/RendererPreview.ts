@@ -98,9 +98,9 @@ class RendererPreview {
 			const el = document.createElement('div');
 			if(type.opaque){
 				el.style.backgroundImage = `url(${tileTexture.src})`;
-				el.style.backgroundSize = '240px 760px';
+				el.style.backgroundSize = '180px 570px';
 				el.style.backgroundRepeat = 'no-repeat';
-				el.style.backgroundPosition = `${type.xImg / 64 * 40 * -1}px ${type.yImg / 64 * 40 * -1}px`;
+				el.style.backgroundPosition = `${type.xImg / 64 * 30 * -1}px ${type.yImg / 64 * 30 * -1}px`;
 			}
 			el.onclick = () => {
 				this.selectedIndex = i;

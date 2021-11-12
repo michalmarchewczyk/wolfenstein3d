@@ -157,7 +157,7 @@ class Renderer {
 		let diff = (this.player.dir) - (Math.atan2(vSDir.y, vSDir.x));
 		diff = (diff + 3*Math.PI) % (2*Math.PI) - Math.PI;
 
-		const scale = (1+Math.abs(diff/5));
+		const scale = 1 + Math.abs(Math.sin(diff))/3.2;
 
 		for(let i = FOV/-2; i <= FOV/2; i += FOV/HORIZONTAL_RESOLUTION){
 			const offset = Math.atan(i/0.9);
@@ -289,7 +289,7 @@ class Renderer {
 				);
 				let darkness = 0;
 				if(sprite.type === SpriteType.NS){
-					darkness = 0.4;
+					darkness = 0.6;
 				}
 				darkness = darkness + dist/20;
 				this.ctx.beginPath();
