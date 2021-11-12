@@ -25,6 +25,7 @@ class Game {
 	private keyboardController:KeyboardController = new KeyboardController();
 	private animationClock:AnimationClock;
 	private entities:Entity[] = [];
+	private level = 1;
 
 	constructor(){
 		this.player = new Player(30.5, 49.5, 0, (x,y) => {
@@ -81,7 +82,7 @@ class Game {
 			entity.tick(delta);
 		});
 
-		this.hud.draw(delta, this.player);
+		this.hud.draw(delta, this.player, this.level);
 
 		window.requestAnimationFrame(() => {
 			this.tick();

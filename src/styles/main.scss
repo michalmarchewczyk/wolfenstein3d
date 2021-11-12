@@ -2,6 +2,7 @@ $scale: 1.5;
 
 * {
   box-sizing: border-box;
+  image-rendering: pixelated;
 }
 
 body {
@@ -58,26 +59,42 @@ canvas {
 
     .hudStats {
       position: absolute;
-      width: 640px * $scale;
-      height: 80px * $scale;
-      bottom: 0;
+      width: 640px;
+      height: 80px;
+      bottom: 8px * $scale;
       left: 0;
-      outline: 1px solid blue;
+      //outline: 1px solid blue;
       image-rendering: pixelated;
-      background-size: (640px * $scale) (262px * $scale);
+      background-size: 640px 262px;
       background-repeat: no-repeat;
       background-position: 0 0;
+      transform: scale($scale);
+      transform-origin: 0 100%;
+
 
       .hudFace {
         position: absolute;
         width: 48px;
         height: 62px;
-        left: 274px * $scale;
-        top: 10px * $scale;
-        transform: scale($scale);
+        left: 274px;
+        top: 10px;
         transform-origin: 0 0;
         image-rendering: pixelated;
         //outline: 1px solid red;
+      }
+    }
+
+    .counter {
+      position: absolute;
+      height: 32px;
+      //outline: 1px solid red;
+
+      .counterDigit {
+        position: absolute;
+        height: 32px;
+        width: 16px;
+        //outline: 1px solid red;
+
       }
     }
   }

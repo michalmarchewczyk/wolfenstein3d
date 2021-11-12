@@ -17,7 +17,7 @@ class HUDFace {
 
 		if(this.timer >= this.nextTime){
 			this.timer = 0;
-			this.nextTime = Math.random() * 2 + 0.2;
+			this.nextTime = Math.random() * 1.2 + 0.2;
 			this.drawFace(playerHealth);
 		}
 	}
