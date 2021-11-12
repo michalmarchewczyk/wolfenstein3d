@@ -132,6 +132,9 @@ class Game {
 			})[0];
 			nearestEntity?.activate();
 		});
+		this.keyboardController.addListener('e', 'down', () => {
+			this.player.fire();
+		});
 		this.keyboardController.focus();
 	}
 

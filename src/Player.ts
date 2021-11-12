@@ -1,4 +1,5 @@
 import {COLLISION_PADDING} from '@src/settings';
+import Weapon, {weapons} from '@src/Weapon';
 
 class Player {
 	public speed = 0;
@@ -8,6 +9,8 @@ class Player {
 	public ammo = 8;
 	public lives = 3;
 	public score = 0;
+	public weapon:Weapon = weapons[1];
+	public lastFire = 0;
 
 	constructor(public x = 5.5, public y = 5.5, public dir:number = 0, public checkWall:(x:number,y:number)=>boolean = ()=>false){
 
@@ -39,6 +42,14 @@ class Player {
 			Math.cos(this.dir) * this.speed * this.speedMultiplier * delta,
 			Math.sin(this.dir) * this.speed * this.speedMultiplier * delta,
 		);
+	}
+
+	fire(){
+		const currentTime = Date.now()/1000;
+		if(currentTime - this.lastFire > this.weapon.delay){
+			this.lastFire = Date.now()/1000;
+		}
+
 	}
 }
 
