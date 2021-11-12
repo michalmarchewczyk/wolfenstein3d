@@ -214,6 +214,7 @@ class RendererPreview {
 
 	render():HTMLDivElement {
 		const el = document.createElement('div');
+		el.classList.add('preview');
 		el.appendChild(this.canvasStatic);
 		el.appendChild(this.canvasDynamic);
 		el.appendChild(this.tileSelector);

@@ -9,6 +9,7 @@ import Sprite from '@src/Sprite';
 import map from './maps/map1.json';
 import Entity from '@src/Entity';
 import {sprites, entities} from '@src/maps/map1';
+import HUD from '@src/HUD';
 
 
 class Game {
@@ -17,6 +18,7 @@ class Game {
 	private mapSize = 64;
 	private renderer: Renderer;
 	private rendererPreview:RendererPreview;
+	private hud:HUD;
 	private tiles:Tile[] = [];
 	private readonly player:Player;
 	private readonly element:HTMLDivElement;
@@ -41,8 +43,10 @@ class Game {
 		this.element = document.createElement('div');
 		this.renderer = new Renderer(this.map, this.tiles, this.player, this.sprites, this.entities);
 		this.rendererPreview = new RendererPreview(this.map, this.tiles, this.player, this.sprites, this.entities);
-		this.element.appendChild(this.rendererPreview.render());
+		this.hud = new HUD();
 		this.element.appendChild(this.renderer.render());
+		this.element.appendChild(this.hud.render());
+		this.element.classList.add('game');
 		this.initControls();
 
 		this.animationClock = new AnimationClock();
@@ -76,6 +80,8 @@ class Game {
 		this.entities.forEach(entity => {
 			entity.tick(delta);
 		});
+
+		this.hud.draw(delta, this.player);
 
 		window.requestAnimationFrame(() => {
 			this.tick();
@@ -128,8 +134,8 @@ class Game {
 		this.keyboardController.focus();
 	}
 
-	render():HTMLDivElement {
-		return this.element;
+	render():HTMLDivElement[] {
+		return [this.element, this.rendererPreview.render()];
 	}
 }
 

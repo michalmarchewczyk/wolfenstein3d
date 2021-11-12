@@ -1,3 +1,5 @@
+$scale: 1.5;
+
 * {
   box-sizing: border-box;
 }
@@ -5,16 +7,14 @@
 body {
   background: #282828;
   margin: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
 }
 
 canvas {
   float: left;
   image-rendering: pixelated;
-
-  &.mainView {
-    width: calc(640px * 1.2);
-    height: calc(480px * 1.2);
-  }
 
   &.previewDynamic {
     position: relative;
@@ -37,4 +37,67 @@ canvas {
     height: 30px;
     border: 1px solid green;
   }
+}
+
+.game {
+  position: absolute;
+  right: 40px;
+  top: 20px;
+  width: 640px * $scale;
+  height: 480px * $scale;
+  outline: 1px solid green;
+  background: #004040;
+
+  .hud {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 640px * $scale;
+    height: 480px * $scale;
+    //outline: 2px solid red;
+
+    .hudStats {
+      position: absolute;
+      width: 640px * $scale;
+      height: 80px * $scale;
+      bottom: 0;
+      left: 0;
+      outline: 1px solid blue;
+      image-rendering: pixelated;
+      background-size: (640px * $scale) (262px * $scale);
+      background-repeat: no-repeat;
+      background-position: 0 0;
+
+      .hudFace {
+        position: absolute;
+        width: 48px;
+        height: 62px;
+        left: 274px * $scale;
+        top: 10px * $scale;
+        transform: scale($scale);
+        transform-origin: 0 0;
+        image-rendering: pixelated;
+        //outline: 1px solid red;
+      }
+    }
+  }
+  .mainView {
+    position: absolute;
+    width: (640px - 40px) * $scale;
+    height: (480px - 120px) * $scale;
+    left: 20px * $scale;
+    top: 20px * $scale;
+    border-right: 2px * $scale solid #007070;
+    border-left: 2px * $scale solid #000000;
+    border-bottom: 2px * $scale solid #007070;
+    border-top: 2px * $scale solid #000000;
+
+  }
+}
+
+.preview {
+  position: absolute;
+  left: 40px;
+  top: 20px;
+  border: 1px solid green;
 }

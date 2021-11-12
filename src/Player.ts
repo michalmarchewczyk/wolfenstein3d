@@ -4,6 +4,10 @@ class Player {
 	public speed = 0;
 	public rotationSpeed = 0;
 	public speedMultiplier = 1;
+	public health = 100;
+	public ammo = 8;
+	public lives = 3;
+	public score = 0;
 
 	constructor(public x = 5.5, public y = 5.5, public dir:number = 0, public checkWall:(x:number,y:number)=>boolean = ()=>false){
 
