@@ -6,7 +6,7 @@ import Raycaster from '@src/Raycaster';
 import Sprite, {SpriteType} from '@src/Sprite';
 import {spriteTexture, spriteTextureMirrored} from '@src/SpriteTexture';
 import Entity from '@src/Entity';
-import {BLOCK_HEIGHT, FOV, HORIZONTAL_RESOLUTION} from '@src/settings';
+import {BLOCK_HEIGHT, CANVAS_HEIGHT, CANVAS_WIDTH, FOV, HORIZONTAL_RESOLUTION} from '@src/settings';
 
 class Renderer {
 	private readonly element:HTMLDivElement;
@@ -22,8 +22,8 @@ class Renderer {
 
 		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		this.ctx = this.canvas.getContext('2d', {alpha: false})!;
-		this.canvas.width = 640;
-		this.canvas.height = 480;
+		this.canvas.width = CANVAS_WIDTH;
+		this.canvas.height = CANVAS_HEIGHT;
 		this.canvas.classList.add('mainView');
 
 		this.texturesImg = new Image();
@@ -42,9 +42,9 @@ class Renderer {
 		this.ctx.imageSmoothingEnabled = false;
 
 		this.ctx.fillStyle = '#7a7a7a';
-		this.ctx.fillRect(0, 0, 640, 480);
+		this.ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT);
 		this.ctx.fillStyle = '#383838';
-		this.ctx.fillRect(0, 0, 640, 240);
+		this.ctx.fillRect(0, 0, CANVAS_WIDTH, CANVAS_HEIGHT/2);
 
 
 		this.zBuffer = [];
@@ -104,7 +104,7 @@ class Renderer {
 		this.zBuffer[angle] = distance;
 
 		this.drawLine(
-			Math.round((scanline+FOV/2) * (640/FOV)),
+			Math.round((scanline+FOV/2) * (CANVAS_WIDTH/FOV)),
 			BLOCK_HEIGHT / (perpWallDist * Math.cos(angle)),
 			darkness,
 			xTex,
@@ -117,13 +117,13 @@ class Renderer {
 
 		this.ctx.drawImage(this.texturesImg,
 			tile.type.xImg + xTex*63 - (scaling/2)/height + 1, tile.type.yImg, scaling/height, 64,
-			Math.floor(scanline), 240-height/2, 640/HORIZONTAL_RESOLUTION, height
+			Math.floor(scanline), CANVAS_HEIGHT/2-height/2, CANVAS_WIDTH/HORIZONTAL_RESOLUTION, height
 		);
 
 		this.ctx.globalAlpha = darkness/2;
 		this.ctx.beginPath();
 		this.ctx.fillStyle = '#000000';
-		this.ctx.rect(scanline, 240-height/2, 640/HORIZONTAL_RESOLUTION, height);
+		this.ctx.rect(scanline, CANVAS_HEIGHT/2-height/2, CANVAS_WIDTH/HORIZONTAL_RESOLUTION, height);
 		this.ctx.fill();
 		this.ctx.globalAlpha = 1;
 	}
@@ -170,14 +170,14 @@ class Renderer {
 
 			aDiff = (aDiff + 3*Math.PI) % (2*Math.PI) - Math.PI;
 
-			const scanline = Math.round((i+FOV/2) * (640/FOV));
+			const scanline = Math.round((i+FOV/2) * (CANVAS_WIDTH/FOV));
 
 			const height = scale / dist * BLOCK_HEIGHT;
 
 			if (Math.abs(aDiff) < 0.44 * (1 / dist) * scale) {
 				this.ctx.drawImage(spriteTexture, sprite.texture.xImg + ((aDiff * dist + 0.44 * scale) * 1.12 * 128 / scale),
 					sprite.texture.yImg, 1, 128,
-					scanline, 240 - height / 2, 640/HORIZONTAL_RESOLUTION, height);
+					scanline, CANVAS_HEIGHT/2 - height / 2, CANVAS_WIDTH/HORIZONTAL_RESOLUTION, height);
 			}
 
 		}
@@ -232,7 +232,7 @@ class Renderer {
 			const x = (b2*c1-b1*c2)/det;
 			const y = (a1*c2-a2*c1)/det;
 
-			const scanline = Math.round((i+FOV/2) * (640/FOV));
+			const scanline = Math.round((i+FOV/2) * (CANVAS_WIDTH/FOV));
 
 			const dist = Math.sqrt((x-playerPoint.x)*(x-playerPoint.x) + (y-playerPoint.y)*(y-playerPoint.y));
 
@@ -285,7 +285,7 @@ class Renderer {
 
 				this.ctx.drawImage(texture,
 					sprite.texture.xImg + xTex*127 - (scaling/2)/height, sprite.texture.yImg, (scaling)/height, 128,
-					scanline, 240-height/2, 640/HORIZONTAL_RESOLUTION, height
+					scanline, CANVAS_HEIGHT/2-height/2, CANVAS_WIDTH/HORIZONTAL_RESOLUTION, height
 				);
 				let darkness = 0;
 				if(sprite.type === SpriteType.NS){
@@ -295,7 +295,7 @@ class Renderer {
 				this.ctx.beginPath();
 				this.ctx.fillStyle = '#000000';
 				this.ctx.globalAlpha = darkness/2;
-				this.ctx.rect(scanline, 240-height/2, 640/HORIZONTAL_RESOLUTION, height);
+				this.ctx.rect(scanline, CANVAS_HEIGHT/2-height/2, CANVAS_WIDTH/HORIZONTAL_RESOLUTION, height);
 				this.ctx.fill();
 				this.ctx.globalAlpha = 1;
 

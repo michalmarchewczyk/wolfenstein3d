@@ -1,4 +1,4 @@
-const COLLISION_PADDING = 0.2;
+import {COLLISION_PADDING} from '@src/settings';
 
 class Player {
 	public speed = 0;
