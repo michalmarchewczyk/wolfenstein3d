@@ -10,6 +10,7 @@ import map from './maps/map1.json';
 import Entity from '@src/Entity';
 import {sprites, entities} from '@src/maps/map1';
 import HUD from '@src/HUD';
+import CollectableSprite from '@src/sprites/CollectableSprite';
 
 
 class Game {
@@ -80,6 +81,15 @@ class Game {
 		this.player.tick(delta);
 		this.entities.forEach(entity => {
 			entity.tick(delta);
+		});
+
+		this.sprites.forEach(sprite => {
+			if(sprite instanceof CollectableSprite){
+				const dist = Math.sqrt((this.player.x - sprite.x)*(this.player.x - sprite.x) + (this.player.y - sprite.y)*(this.player.y - sprite.y));
+				if(dist <= 1){
+					sprite.collect(this.player);
+				}
+			}
 		});
 
 		this.hud.draw(delta, this.player, this.level);

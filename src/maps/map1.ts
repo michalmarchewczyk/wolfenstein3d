@@ -3,6 +3,15 @@ import Entity from '@src/Entity';
 import Door from '@src/Door';
 import {spriteTextures} from '@src/SpriteTexture';
 import HiddenDoor from '@src/HiddenDoor';
+import Food from '@src/sprites/Food';
+import AmmoBox from '@src/sprites/AmmoBox';
+import DogFood from '@src/sprites/DogFood';
+import AidKit from '@src/sprites/AidKit';
+import GoldCup from '@src/sprites/GoldCup';
+import GoldCross from '@src/sprites/GoldCross';
+import GoldBox from '@src/sprites/GoldBox';
+import Face from '@src/sprites/Face';
+import Rifle from '@src/sprites/Rifle';
 
 const sprites:Sprite[] = [
 
@@ -12,12 +21,12 @@ const sprites:Sprite[] = [
 	new Sprite(39.5, 53.5, spriteTextures.lamp),
 	new Sprite(35.5, 49.5, spriteTextures.lamp),
 	new Sprite(35.5, 44.5, spriteTextures.lamp),
-	new Sprite(35.5, 54.5, spriteTextures.chicken),
-	new Sprite(38.5, 49.5, spriteTextures.chicken),
-	new Sprite(41.5, 53.5, spriteTextures.ammoBox),
+	new Food(35.5, 54.5),
+	new Food(38.5, 49.5),
+	new AmmoBox(41.5, 53.5),
 	new Sprite(41.5, 49.5, spriteTextures.bones),
 	new Sprite(39.5, 44.5, spriteTextures.skeleton),
-	new Sprite(30.5, 43.5, spriteTextures.chicken),
+	new Food(30.5, 43.5),
 	new Sprite(35.5, 40.5, spriteTextures.lamp),
 	new Sprite(35.5, 37.5, spriteTextures.lamp),
 	new Sprite(35.5, 34.5, spriteTextures.lamp),
@@ -35,16 +44,16 @@ const sprites:Sprite[] = [
 	new Sprite(40.5, 26.5, spriteTextures.chandelier),
 
 	// blue-2
-	new Sprite(59.5, 35.5, spriteTextures.dogFood),
+	new DogFood(59.5, 35.5),
 	new Sprite(60.5, 38.5, spriteTextures.brownBowl),
 	new Sprite(57.5, 28.5, spriteTextures.table, true),
 	new Sprite(60.5, 28.5, spriteTextures.table, true),
 	new Sprite(60.5, 22.5, spriteTextures.barrel, true),
 	new Sprite(61.5, 22.5, spriteTextures.barrel, true),
 	new Sprite(62.5, 22.5, spriteTextures.barrel, true),
-	new Sprite(55.5, 22.5, spriteTextures.chicken),
-	new Sprite(58.5, 28.5, spriteTextures.chicken),
-	new Sprite(61.5, 30.5, spriteTextures.chicken),
+	new Food(55.5, 22.5),
+	new Food(58.5, 28.5),
+	new Food(61.5, 30.5),
 	new Sprite(60.5, 31.5, spriteTextures.well, true),
 	new Sprite(57.5, 31.5, spriteTextures.wellFull, true),
 
@@ -53,11 +62,11 @@ const sprites:Sprite[] = [
 	new Sprite(35.5, 15.5, spriteTextures.lamp),
 	new Sprite(35.5, 11.5, spriteTextures.lamp),
 	new Sprite(38.5, 15.5, spriteTextures.knight, true),
-	new Sprite(30.5, 17.5, spriteTextures.aidKit),
-	new Sprite(30.5, 18.5, spriteTextures.aidKit),
-	new Sprite(29.5, 18.5, spriteTextures.rifle),
-	new Sprite(29.5, 17.5, spriteTextures.ammoBox),
-	new Sprite(29.5, 16.5, spriteTextures.ammoBox),
+	new AidKit(30.5, 17.5),
+	new AidKit(30.5, 18.5),
+	new Rifle(29.5, 18.5),
+	new AmmoBox(29.5, 17.5),
+	new AmmoBox(29.5, 16.5),
 
 	// wood-2
 	new Sprite(35.5, 2.5, spriteTextures.tableChairs, true),
@@ -66,13 +75,13 @@ const sprites:Sprite[] = [
 	new Sprite(35.5, 4.5, spriteTextures.chandelier),
 	new Sprite(30.5, 1.5, spriteTextures.blueVase, true),
 	new Sprite(40.5, 1.5, spriteTextures.blueVase, true),
-	new Sprite(42.5, 5.5, spriteTextures.goldCup),
-	new Sprite(43.5, 5.5, spriteTextures.goldCup),
-	new Sprite(44.5, 5.5, spriteTextures.goldCup),
-	new Sprite(44.5, 3.5, spriteTextures.goldCup),
-	new Sprite(44.5, 4.5, spriteTextures.goldCross),
-	new Sprite(43.5, 3.5, spriteTextures.goldCross),
-	new Sprite(42.5, 3.5, spriteTextures.goldCross),
+	new GoldCup(42.5, 5.5),
+	new GoldCup(43.5, 5.5),
+	new GoldCup(44.5, 5.5),
+	new GoldCup(44.5, 3.5),
+	new GoldCross(44.5, 4.5),
+	new GoldCross(43.5, 3.5),
+	new GoldCross(42.5, 3.5),
 
 	// stone-2
 	new Sprite(25.5, 4.5, spriteTextures.lamp),
@@ -88,28 +97,28 @@ const sprites:Sprite[] = [
 	new Sprite(6.5, 10.5, spriteTextures.flag, true),
 	new Sprite(11.5, 7.5, spriteTextures.whitePlant, true),
 	new Sprite(9.5, 7.5, spriteTextures.whitePlant, true),
-	new Sprite(6.5, 12.5, spriteTextures.goldBox),
-	new Sprite(6.5, 13.5, spriteTextures.goldBox),
-	new Sprite(7.5, 13.5, spriteTextures.goldBox),
-	new Sprite(12.5, 7.5, spriteTextures.goldCup),
-	new Sprite(8.5, 7.5, spriteTextures.goldCup),
-	new Sprite(7.5, 7.5, spriteTextures.goldCross),
-	new Sprite(12.5, 8.5, spriteTextures.goldCross),
-	new Sprite(6.5, 2.5, spriteTextures.ammoBox),
-	new Sprite(6.5, 3.5, spriteTextures.ammoBox),
-	new Sprite(6.5, 4.5, spriteTextures.ammoBox),
-	new Sprite(6.5, 5.5, spriteTextures.ammoBox),
-	new Sprite(7.5, 2.5, spriteTextures.ammoBox),
-	new Sprite(7.5, 3.5, spriteTextures.ammoBox),
-	new Sprite(7.5, 4.5, spriteTextures.ammoBox),
-	new Sprite(7.5, 5.5, spriteTextures.ammoBox),
-	new Sprite(8.5, 2.5, spriteTextures.goldCross),
-	new Sprite(9.5, 2.5, spriteTextures.goldCross),
-	new Sprite(9.5, 3.5, spriteTextures.goldCross),
-	new Sprite(8.5, 3.5, spriteTextures.goldBox),
-	new Sprite(8.5, 4.5, spriteTextures.goldBox),
-	new Sprite(8.5, 5.5, spriteTextures.goldBox),
-	new Sprite(9.5, 4.5, spriteTextures.goldBox),
+	new GoldBox(6.5, 12.5),
+	new GoldBox(6.5, 13.5),
+	new GoldBox(7.5, 13.5),
+	new GoldCup(12.5, 7.5),
+	new GoldCup(8.5, 7.5),
+	new GoldCross(7.5, 7.5),
+	new GoldCross(12.5, 8.5),
+	new AmmoBox(6.5, 2.5),
+	new AmmoBox(6.5, 3.5),
+	new AmmoBox(6.5, 4.5),
+	new AmmoBox(6.5, 5.5),
+	new AmmoBox(7.5, 2.5),
+	new AmmoBox(7.5, 3.5),
+	new AmmoBox(7.5, 4.5),
+	new AmmoBox(7.5, 5.5),
+	new GoldCross(8.5, 2.5),
+	new GoldCross(9.5, 2.5),
+	new GoldCross(9.5, 3.5),
+	new GoldBox(8.5, 3.5),
+	new GoldBox(8.5, 4.5),
+	new GoldBox(8.5, 5.5),
+	new GoldBox(9.5, 4.5),
 
 	// stone-4
 	new Sprite(10.5, 16.5, spriteTextures.lamp),
@@ -132,16 +141,16 @@ const sprites:Sprite[] = [
 	new Sprite(2.5, 22.5, spriteTextures.lamp),
 	new Sprite(2.5, 18.5, spriteTextures.lamp),
 	new Sprite(7.5, 34.5, spriteTextures.greenBarrel, true),
-	new Sprite(5.5, 36.5, spriteTextures.chicken),
-	new Sprite(7.5, 18.5, spriteTextures.chicken),
-	new Sprite(7.5, 20.5, spriteTextures.goldCup),
+	new Food(5.5, 36.5),
+	new Food(7.5, 18.5),
+	new GoldCup(7.5, 20.5),
 	new Sprite(2.5, 14.5, spriteTextures.lamp),
-	new Sprite(2.5, 13.5, spriteTextures.aidKit),
+	new AidKit(2.5, 13.5),
 	new Sprite(3.5, 13.5, spriteTextures.barrel, true),
 
 	// stone-6
-	new Sprite(19.5, 43.5, spriteTextures.aidKit),
-	new Sprite(14.5, 48.5, spriteTextures.face),
+	new AidKit(19.5, 43.5),
+	new Face(14.5, 48.5),
 
 ];
 
