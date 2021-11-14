@@ -17,6 +17,7 @@ class HUD {
 	private displayedWeapon:Weapon = weapons[0];
 	private readonly weaponThumbnail:HTMLDivElement;
 	private readonly weaponImage:HTMLDivElement;
+	private readonly overlay:HTMLDivElement;
 
 	constructor() {
 		this.element = document.createElement('div');
@@ -75,6 +76,11 @@ class HUD {
 		this.weaponImage.style.backgroundImage = `url(${weaponTexture})`;
 		this.weaponImage.style.backgroundPosition = `${0}px ${this.displayedWeapon.yTex * -2}px`;
 
+
+		this.overlay = document.createElement('div');
+		this.overlay.classList.add('overlay');
+		this.element.appendChild(this.overlay);
+
 	}
 
 	draw(delta:number, player:Player, level:number) {
@@ -116,6 +122,12 @@ class HUD {
 		}
 	}
 
+	flash(){
+		this.overlay.classList.add('overlayOn');
+		setTimeout(() => {
+			this.overlay.classList.remove('overlayOn');
+		}, 50);
+	}
 
 	render():HTMLDivElement {
 		return this.element;

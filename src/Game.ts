@@ -89,7 +89,10 @@ class Game {
 			if (sprite instanceof CollectableSprite) {
 				const dist = calcDist(this.player.x, this.player.y, sprite.x, sprite.y);
 				if (dist <= 1) {
-					sprite.collect(this.player);
+					const collected = sprite.collect(this.player);
+					if(collected) {
+						this.hud.flash();
+					}
 				}
 			}
 		});

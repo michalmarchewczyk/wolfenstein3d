@@ -14,11 +14,13 @@ abstract class CollectableSprite extends Sprite {
 		super(x, y, texture, false, SpriteType.Normal);
 	}
 
-	collect(player:Player) {
+	collect(player:Player):boolean {
 		if (this.callback(player)) {
 			this.x = -2000;
 			this.y = -2000;
+			return true;
 		}
+		return false;
 	}
 }
 
