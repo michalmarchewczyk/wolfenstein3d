@@ -1,4 +1,4 @@
-import SpriteTexture, {spriteTextures} from '@src/SpriteTexture';
+import SpriteTexture, {spriteTextures} from '@src/sprites/SpriteTexture';
 
 enum SpriteType {
 	Normal,
@@ -13,7 +13,7 @@ class Sprite {
 		public texture:SpriteTexture = spriteTextures.debug,
 		public collision:boolean = false,
 		public type:SpriteType = SpriteType.Normal
-	){
+	) {
 
 	}
 }

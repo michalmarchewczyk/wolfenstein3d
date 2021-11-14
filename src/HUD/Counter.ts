@@ -1,4 +1,4 @@
-import hudTexture from './assets/hud.png';
+import hudTexture from '../assets/hud.png';
 
 class Counter {
 	private _number = 0;
@@ -13,7 +13,7 @@ class Counter {
 
 	}
 
-	set number(number:number){
+	set number(number:number) {
 		this._number = number;
 		this.draw();
 	}
@@ -22,10 +22,10 @@ class Counter {
 		return this._number;
 	}
 
-	draw(){
+	draw() {
 		this.element.innerHTML = '';
 		const string = this._number.toString().padStart(this.length, ' ');
-		for(let i = 0; i < this.length; i++){
+		for (let i = 0; i < this.length; i++) {
 			const digitEl = document.createElement('div');
 			digitEl.classList.add('counterDigit');
 			digitEl.style.left = (i * 16) + 'px';
@@ -33,10 +33,10 @@ class Counter {
 			digitEl.style.backgroundSize = '640px 262px';
 			digitEl.style.backgroundPosition = `${-219 * 2}px ${-41 * 2}px`;
 			this.element.appendChild(digitEl);
-			if(string[i] === ' '){
+			if (string[i] === ' ') {
 				digitEl.style.backgroundPosition = `${-219 * 2}px ${-41 * 2}px`;
-			}else{
-				digitEl.style.backgroundPosition = `${(-228 + parseInt(string[i])* -9)*2}px ${-41 * 2}px`;
+			} else {
+				digitEl.style.backgroundPosition = `${(-228 + parseInt(string[i]) * -9) * 2}px ${-41 * 2}px`;
 			}
 		}
 

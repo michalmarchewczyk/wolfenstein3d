@@ -11,20 +11,6 @@ class Vector {
 		return result;
 	}
 
-	subtract(vector:Vector):Vector {
-		const result = new Vector(this.x, this.y);
-		result.x -= vector.x;
-		result.y -= vector.y;
-		return result;
-	}
-
-	dotProduct(vector:Vector):Vector {
-		const result = new Vector(this.x, this.y);
-		result.x *= vector.x;
-		result.y *= vector.y;
-		return result;
-	}
-
 	multiply(scalar:number):Vector {
 		const result = new Vector(this.x, this.y);
 		result.x *= scalar;

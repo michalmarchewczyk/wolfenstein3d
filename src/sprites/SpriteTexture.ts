@@ -1,10 +1,10 @@
-import sprites from './assets/sprites.png';
-import spritesMirrored from './assets/spritesMirrored.png';
+import sprites from '../assets/sprites.png';
+import spritesMirrored from '../assets/spritesMirrored.png';
 
 class SpriteTexture {
 	constructor(
-		public xImg: number = 128,
-		public yImg:number = 128,){
+		public xImg:number = 128,
+		public yImg:number = 128,) {
 	}
 }
 

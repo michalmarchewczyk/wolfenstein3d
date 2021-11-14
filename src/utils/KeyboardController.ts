@@ -1,7 +1,7 @@
 interface KeyboardListener {
 	key:string,
 	callback:() => void,
-	type:'press'|'down'|'up',
+	type:'press' | 'down' | 'up',
 	pressed:boolean,
 }
 
@@ -57,7 +57,9 @@ export default class KeyboardController {
 		});
 	}
 
-	addListener(key:string, type:'press'|'down'|'up' = 'down', callback:() => void = () => {return;}) {
+	addListener(key:string, type:'press' | 'down' | 'up' = 'down', callback:() => void = () => {
+		return;
+	}) {
 		this.listeners.push({
 			key,
 			callback,

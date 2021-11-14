@@ -4,7 +4,7 @@ interface Weapon {
 	xTex:number,
 	delay:number,
 	range:number,
-	angle: number,
+	angle:number,
 	auto:boolean,
 }
 
@@ -16,7 +16,7 @@ const weapons:Weapon[] = [
 		yTex: 0,
 		xTex: 0,
 		delay: 0.6,
-		range:2,
+		range: 2,
 		angle: 1,
 		auto: false
 	},

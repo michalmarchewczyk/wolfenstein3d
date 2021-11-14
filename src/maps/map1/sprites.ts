@@ -1,17 +1,14 @@
-import Sprite from '@src/Sprite';
-import Entity from '@src/Entity';
-import Door from '@src/Door';
-import {spriteTextures} from '@src/SpriteTexture';
-import HiddenDoor from '@src/HiddenDoor';
-import Food from '@src/sprites/Food';
-import AmmoBox from '@src/sprites/AmmoBox';
-import DogFood from '@src/sprites/DogFood';
-import AidKit from '@src/sprites/AidKit';
-import GoldCup from '@src/sprites/GoldCup';
-import GoldCross from '@src/sprites/GoldCross';
-import GoldBox from '@src/sprites/GoldBox';
-import Face from '@src/sprites/Face';
-import Rifle from '@src/sprites/Rifle';
+import Sprite from '@src/sprites/Sprite';
+import {spriteTextures} from '@src/sprites/SpriteTexture';
+import Food from '@src/sprites/collectable/Food';
+import AmmoBox from '@src/sprites/collectable/AmmoBox';
+import DogFood from '@src/sprites/collectable/DogFood';
+import AidKit from '@src/sprites/collectable/AidKit';
+import GoldCup from '@src/sprites/collectable/GoldCup';
+import GoldCross from '@src/sprites/collectable/GoldCross';
+import GoldBox from '@src/sprites/collectable/GoldBox';
+import Face from '@src/sprites/collectable/Face';
+import Rifle from '@src/sprites/collectable/Rifle';
 
 const sprites:Sprite[] = [
 
@@ -154,37 +151,6 @@ const sprites:Sprite[] = [
 
 ];
 
-const entities:Entity[] = [
-	new Door(33.5, 49.5, 'NS'),
-	new Door(37.5, 49.5, 'NS'),
-	new Door(33.5, 44.5, 'NS'),
-	new Door(37.5, 44.5, 'NS'),
-	new Door(35.5, 42.5, 'EW'),
-	new Door(35.5, 31.5, 'EW'),
-	new Door(44.5, 26.5, 'NS'),
-	new Door(54.5, 26.5, 'NS'),
-	new Door(51.5, 37.5, 'NS'),
-	new Door(35.5, 21.5, 'EW'),
-	new Door(35.5, 8.5, 'EW'),
-	new Door(29.5, 4.5, 'NS'),
-	new Door(41.5, 4.5, 'NS'),
-	new Door(15.5, 10.5, 'NS'),
-	new Door(10.5, 14.5, 'EW'),
-	new Door(10.5, 21.5, 'EW'),
-	new Door(10.5, 31.5, 'EW'),
-	new Door(2.5, 16.5, 'EW'),
-	new Door(5.5, 26.5, 'NS'),
-	new Door(17.5, 40.5, 'NS'),
-
-	new HiddenDoor(31.5, 15.5, 'WE', spriteTextures.woodWall2),
-	new HiddenDoor(10.5, 6.5, 'SN', spriteTextures.stoneWall4),
-	new HiddenDoor(18.5, 42.5, 'NS', spriteTextures.stoneWall),
-	new HiddenDoor(17.5, 43.5, 'WE', spriteTextures.stoneWall),
-	new HiddenDoor(13.5, 46.5, 'NS', spriteTextures.stoneWall),
-];
-
-
 export {
 	sprites,
-	entities
 };

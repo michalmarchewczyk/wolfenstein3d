@@ -1,5 +1,5 @@
-import Sprite, {SpriteType} from '@src/Sprite';
-import SpriteTexture, {spriteTextures} from '@src/SpriteTexture';
+import Sprite, {SpriteType} from '@src/sprites/Sprite';
+import SpriteTexture, {spriteTextures} from '@src/sprites/SpriteTexture';
 import Player from '@src/Player';
 
 abstract class CollectableSprite extends Sprite {
@@ -7,13 +7,15 @@ abstract class CollectableSprite extends Sprite {
 		public x:number,
 		public y:number,
 		public texture:SpriteTexture = spriteTextures.debug,
-		public callback:(player:Player)=>boolean = ()=>{return true;}
+		public callback:(player:Player) => boolean = () => {
+			return true;
+		}
 	) {
 		super(x, y, texture, false, SpriteType.Normal);
 	}
 
-	collect(player:Player){
-		if(this.callback(player)){
+	collect(player:Player) {
+		if (this.callback(player)) {
 			this.x = -2000;
 			this.y = -2000;
 		}

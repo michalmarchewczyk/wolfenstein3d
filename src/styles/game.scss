@@ -1,0 +1,100 @@
+$scale: 1.5;
+
+.game {
+  position: absolute;
+  right: 40px;
+  top: 20px;
+  width: 640px * $scale;
+  height: 480px * $scale;
+  outline: 1px solid green;
+  background: #004040;
+
+  .hud {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 640px * $scale;
+    height: 480px * $scale;
+    //outline: 2px solid red;
+
+    .hudStats {
+      position: absolute;
+      width: 640px;
+      height: 80px;
+      bottom: 8px * $scale;
+      left: 0;
+      //outline: 1px solid blue;
+      background-size: 640px 262px;
+      background-repeat: no-repeat;
+      background-position: 0 0;
+      transform: scale($scale);
+      transform-origin: 0 100%;
+
+
+      .hudFace {
+        position: absolute;
+        width: 48px;
+        height: 62px;
+        left: 274px;
+        top: 10px;
+        image-rendering: pixelated;
+        //outline: 1px solid red;
+      }
+    }
+
+    .counter {
+      position: absolute;
+      height: 32px;
+      //outline: 1px solid red;
+
+      .counterDigit {
+        position: absolute;
+        height: 32px;
+        width: 16px;
+        //outline: 1px solid red;
+
+      }
+    }
+
+    .hudWeaponThumbnail {
+      position: absolute;
+      width: 96px;
+      height: 48px;
+      top: 16px;
+      left: 512px;
+      background-size: 640px 262px;
+      background-repeat: no-repeat;
+      background-position: 0 0;
+      //outline: 1px solid red;
+
+    }
+
+    .hudWeaponImage {
+      position: absolute;
+      width: 256px;
+      height: 256px;
+      top: 122px * $scale;
+      left: 192px * $scale;
+      background-size: 1296px 1172px;
+      background-repeat: no-repeat;
+      background-position: 0 0;
+      //outline: 1px solid red;
+      transform: scale($scale);
+      transform-origin: 0 0;
+
+    }
+  }
+
+  .mainView {
+    position: absolute;
+    width: (640px - 40px) * $scale;
+    height: (480px - 120px) * $scale;
+    left: 20px * $scale;
+    top: 20px * $scale;
+    border-right: 2px * $scale solid #007070;
+    border-left: 2px * $scale solid #000000;
+    border-bottom: 2px * $scale solid #007070;
+    border-top: 2px * $scale solid #000000;
+
+  }
+}

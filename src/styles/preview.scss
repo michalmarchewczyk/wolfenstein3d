@@ -1,0 +1,30 @@
+.preview {
+  position: absolute;
+  left: 40px;
+  top: 20px;
+  border: 1px solid green;
+
+  .tileSelector {
+    border: 1px solid red;
+    float: left;
+    margin: 10px;
+
+    div {
+      position: relative;
+      width: 30px;
+      height: 30px;
+      border: 1px solid green;
+    }
+  }
+
+  .previewDynamic {
+    float: left;
+    position: relative;
+  }
+
+  .previewStatic {
+    float: left;
+    position: absolute;
+    left: 0;
+  }
+}

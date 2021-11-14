@@ -5,19 +5,21 @@ import Player from '@src/Player';
 import AnimationClock from '@src/utils/AnimationClock';
 import Renderer from '@src/Renderer';
 import TileType, {tileTypes} from '@src/TileType';
-import Sprite from '@src/Sprite';
-import map from './maps/map1.json';
-import Entity from '@src/Entity';
-import {sprites, entities} from '@src/maps/map1';
-import HUD from '@src/HUD';
-import CollectableSprite from '@src/sprites/CollectableSprite';
+import Sprite from '@src/sprites/Sprite';
+import map from './maps/map1/tiles.json';
+import Entity from '@src/entities/Entity';
+import {sprites} from '@src/maps/map1/sprites';
+import {entities} from '@src/maps/map1/entities';
+import HUD from '@src/HUD/HUD';
+import CollectableSprite from '@src/sprites/collectable/CollectableSprite';
+import {calcDist} from '@src/utils/math/distance';
 
 
 class Game {
 	public map:Tile[][] = [];
 	public sprites:Sprite[] = [];
 	private mapSize = 64;
-	private renderer: Renderer;
+	private renderer:Renderer;
 	private rendererPreview:RendererPreview;
 	private hud:HUD;
 	private tiles:Tile[] = [];
@@ -28,8 +30,8 @@ class Game {
 	private entities:Entity[] = [];
 	private level = 1;
 
-	constructor(){
-		this.player = new Player(30.5, 49.5, 0, (x,y) => {
+	constructor() {
+		this.player = new Player(30.5, 49.5, 0, (x, y) => {
 			const foundTile = this.tiles
 				.filter(t => t.x === Math.floor(x) && t.y === Math.floor(y))
 				.find(t => t.type.opaque);
@@ -58,9 +60,9 @@ class Game {
 	}
 
 	private initMap():void {
-		for(let x = 0; x < this.mapSize; x++){
+		for (let x = 0; x < this.mapSize; x++) {
 			this.map[x] = [];
-			for(let y = 0; y < this.mapSize; y++){
+			for (let y = 0; y < this.mapSize; y++) {
 				const newTile:Tile = new Tile(x, y);
 				this.map[x][y] = newTile;
 				this.tiles.push(newTile);
@@ -75,7 +77,7 @@ class Game {
 		this.entities = entities;
 	}
 
-	tick(){
+	tick() {
 		const delta = this.animationClock.getDelta();
 
 		this.player.tick(delta);
@@ -84,9 +86,9 @@ class Game {
 		});
 
 		this.sprites.forEach(sprite => {
-			if(sprite instanceof CollectableSprite){
-				const dist = Math.sqrt((this.player.x - sprite.x)*(this.player.x - sprite.x) + (this.player.y - sprite.y)*(this.player.y - sprite.y));
-				if(dist <= 1){
+			if (sprite instanceof CollectableSprite) {
+				const dist = calcDist(this.player.x, this.player.y, sprite.x, sprite.y);
+				if (dist <= 1) {
 					sprite.collect(this.player);
 				}
 			}
@@ -132,14 +134,13 @@ class Game {
 			this.player.speedMultiplier = 1;
 		});
 		this.keyboardController.addListener(' ', 'down', () => {
-			const nearestEntity = this.entities.filter(e => {
-				const dist = Math.sqrt((this.player.x-e.x)*(this.player.x-e.x)+(this.player.y-e.y)*(this.player.y-e.y));
-				return dist < 1.2;
-			}).sort((a,b) => {
-				const distA = Math.sqrt((this.player.x-a.x)*(this.player.x-a.x)+(this.player.y-a.y)*(this.player.y-a.y));
-				const distB = Math.sqrt((this.player.x-b.x)*(this.player.x-b.x)+(this.player.y-b.y)*(this.player.y-b.y));
-				return distA - distB;
-			})[0];
+			const nearestEntity = this.entities
+				.filter(e => calcDist(this.player.x, this.player.y, e.x, e.y) < 1.2)
+				.sort((a, b) => {
+					const distA = calcDist(this.player.x, this.player.y, a.x, a.y);
+					const distB = calcDist(this.player.x, this.player.y, b.x, b.y);
+					return distA - distB;
+				})[0];
 			nearestEntity?.activate();
 		});
 		this.keyboardController.addListener('e', 'down', () => {

@@ -2,9 +2,9 @@ import textures from './assets/textures.png';
 
 class TileType {
 	constructor(
-		public xImg: number = 128,
+		public xImg:number = 128,
 		public yImg:number = 128,
-		public opaque:boolean = true,){
+		public opaque:boolean = true,) {
 	}
 }
 

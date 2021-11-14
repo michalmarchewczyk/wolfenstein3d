@@ -1,11 +1,11 @@
 import Tile from '@src/Tile';
 import Player from '@src/Player';
-import Vector from '@src/utils/Vector';
-import Raycaster from '@src/Raycaster';
+import Vector from '@src/utils/math/Vector';
+import Raycaster from '@src/utils/math/Raycaster';
 import {tileTexture, tileTypes} from '@src/TileType';
-import Sprite from '@src/Sprite';
-import {spriteTexture} from '@src/SpriteTexture';
-import Entity from '@src/Entity';
+import Sprite from '@src/sprites/Sprite';
+import {spriteTexture} from '@src/sprites/SpriteTexture';
+import Entity from '@src/entities/Entity';
 import {FOV, HORIZONTAL_RESOLUTION, PREVIEW_SIZE} from '@src/settings';
 
 class RendererPreview {
@@ -18,14 +18,14 @@ class RendererPreview {
 	private tileSelector = document.createElement('div');
 	private selectedIndex = 0;
 
-	constructor(private map:Tile[][], private tiles:Tile[], private player:Player, private sprites:Sprite[], private entities:Entity[] = []){
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-		this.ctxD = this.canvasDynamic.getContext('2d', {alpha: true})!;
+	constructor(private map:Tile[][], private tiles:Tile[], private player:Player, private sprites:Sprite[], private entities:Entity[] = []) {
+
+		this.ctxD = <CanvasRenderingContext2D>this.canvasDynamic.getContext('2d', {alpha: true});
 		this.canvasDynamic.width = PREVIEW_SIZE;
 		this.canvasDynamic.height = PREVIEW_SIZE;
 		this.canvasDynamic.classList.add('previewDynamic');
 
-		this.ctxS = this.canvasStatic.getContext('2d', {alpha: false})!;
+		this.ctxS = <CanvasRenderingContext2D>this.canvasStatic.getContext('2d', {alpha: false});
 		this.canvasStatic.width = PREVIEW_SIZE;
 		this.canvasStatic.height = PREVIEW_SIZE;
 		this.canvasStatic.classList.add('previewStatic');
@@ -57,11 +57,11 @@ class RendererPreview {
 
 		this.sprites.forEach(sprite => {
 			this.ctxS.drawImage(spriteTexture, sprite.texture.xImg, sprite.texture.yImg, 128, 128,
-				(sprite.x-0.5) * this.tileSize, (sprite.y-0.5)*this.tileSize, this.tileSize, this.tileSize);
+				(sprite.x - 0.5) * this.tileSize, (sprite.y - 0.5) * this.tileSize, this.tileSize, this.tileSize);
 		});
 	}
 
-	draw():void{
+	draw():void {
 		this.ctxD.fillStyle = '#111111';
 		this.ctxD.clearRect(0, 0, PREVIEW_SIZE, PREVIEW_SIZE);
 		this.drawPlayer();
@@ -69,20 +69,20 @@ class RendererPreview {
 		this.ctxD.beginPath();
 		this.ctxD.fillStyle = '#4eb830';
 		this.ctxD.strokeStyle = '#b7f1a6';
-		for(let i = FOV/-2; i <= FOV/2; i += FOV/HORIZONTAL_RESOLUTION){
-			const offset = Math.atan(i/0.9);
+		for (let i = FOV / -2; i <= FOV / 2; i += FOV / HORIZONTAL_RESOLUTION) {
+			const offset = Math.atan(i / 0.9);
 			this.raycast(new Vector(
-				Math.cos(this.player.dir+offset),
-				Math.sin(this.player.dir+offset)
+				Math.cos(this.player.dir + offset),
+				Math.sin(this.player.dir + offset)
 			));
 		}
 		this.ctxD.stroke();
 		this.ctxD.fill();
 
 		this.entities.forEach(entity => {
-			entity.sprites.slice(0,1).forEach(sprite => {
+			entity.sprites.slice(0, 1).forEach(sprite => {
 				this.ctxD.drawImage(spriteTexture, sprite.texture.xImg, sprite.texture.yImg, 128, 128,
-					(sprite.x-0.5) * this.tileSize, (sprite.y-0.5)*this.tileSize, this.tileSize, this.tileSize);
+					(sprite.x - 0.5) * this.tileSize, (sprite.y - 0.5) * this.tileSize, this.tileSize, this.tileSize);
 			});
 		});
 
@@ -94,9 +94,9 @@ class RendererPreview {
 	drawSelector() {
 		this.tileSelector.innerHTML = '';
 
-		Object.values(tileTypes).forEach((type,i) => {
+		Object.values(tileTypes).forEach((type, i) => {
 			const el = document.createElement('div');
-			if(type.opaque){
+			if (type.opaque) {
 				el.style.backgroundImage = `url(${tileTexture.src})`;
 				el.style.backgroundSize = '180px 570px';
 				el.style.backgroundRepeat = 'no-repeat';
@@ -123,7 +123,7 @@ class RendererPreview {
 
 		const {found, vIntersection} = this.raycaster.raycast(vRayDir, vRayStart);
 
-		if(found){
+		if (found) {
 			this.ctxD.moveTo(
 				this.player.x * this.tileSize,
 				this.player.y * this.tileSize
@@ -141,7 +141,7 @@ class RendererPreview {
 				vIntersection.y * this.tileSize,
 				2, 0, 2 * Math.PI
 			);
-		}else{
+		} else {
 			this.ctxD.moveTo(
 				this.player.x * this.tileSize,
 				this.player.y * this.tileSize
@@ -165,7 +165,7 @@ class RendererPreview {
 				this.ctxS.fillStyle = '#134ac2';
 			}
 			this.ctxS.fillRect(tile.x * this.tileSize, tile.y * this.tileSize, this.tileSize, this.tileSize);
-			if(tile.type.opaque){
+			if (tile.type.opaque) {
 				this.ctxS.drawImage(tileTexture,
 					tile.type.xImg, tile.type.yImg, 64, 64,
 					tile.x * this.tileSize, tile.y * this.tileSize, this.tileSize, this.tileSize);
@@ -184,15 +184,15 @@ class RendererPreview {
 
 		this.ctxD.moveTo(this.player.x * this.tileSize, this.player.y * this.tileSize);
 		this.ctxD.lineTo(
-			this.player.x*this.tileSize + 1000 * Math.cos(this.player.dir),
-			this.player.y*this.tileSize + 1000 * Math.sin(this.player.dir)
+			this.player.x * this.tileSize + 1000 * Math.cos(this.player.dir),
+			this.player.y * this.tileSize + 1000 * Math.sin(this.player.dir)
 		);
 
 		this.ctxD.fill();
 		this.ctxD.stroke();
 	}
 
-	click(e:MouseEvent):void{
+	click(e:MouseEvent):void {
 		e.preventDefault();
 		e.stopPropagation();
 
@@ -201,10 +201,10 @@ class RendererPreview {
 		const y = e.clientY - rect.top;
 
 		const tileFound = this.tiles.find(tile => {
-			return tile.x === Math.floor(x/this.tileSize) && tile.y === Math.floor(y/this.tileSize);
+			return tile.x === Math.floor(x / this.tileSize) && tile.y === Math.floor(y / this.tileSize);
 		});
 
-		if(!tileFound) return;
+		if (!tileFound) return;
 
 		tileFound.type = Object.values(tileTypes)[this.selectedIndex];
 
