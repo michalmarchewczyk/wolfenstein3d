@@ -10,6 +10,7 @@ class Player {
 	public lives = 3;
 	public score = 0;
 	public weapon:Weapon = weapons[1];
+	public hiddenWeapon = weapons[1];
 	public lastFire = 0;
 
 	constructor(public x = 5.5, public y = 5.5, public dir:number = 0, public checkWall:(x:number, y:number) => boolean = () => false) {
@@ -48,6 +49,14 @@ class Player {
 		const currentTime = Date.now() / 1000;
 		if (currentTime - this.lastFire > this.weapon.delay) {
 			this.lastFire = Date.now() / 1000;
+			if(this.weapon !== weapons[0]){
+				this.ammo = this.ammo - 1;
+			}
+			if(this.ammo === 0){
+				setTimeout(() => {
+					this.weapon = weapons[0];
+				}, this.weapon.delay * 1000);
+			}
 		}
 
 	}

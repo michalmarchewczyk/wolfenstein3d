@@ -10,6 +10,7 @@ class Rifle extends CollectableSprite {
 	) {
 		super(x, y, spriteTextures.rifle, (player:Player) => {
 			player.weapon = weapons[2];
+			player.hiddenWeapon = weapons[2];
 			return true;
 		});
 	}
