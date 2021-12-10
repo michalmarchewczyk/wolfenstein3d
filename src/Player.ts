@@ -12,6 +12,7 @@ class Player {
 	public weapon:Weapon = weapons[1];
 	public hiddenWeapon = weapons[1];
 	public lastFire = 0;
+	public firing = false;
 
 	constructor(public x = 5.5, public y = 5.5, public dir:number = 0, public checkWall:(x:number, y:number) => boolean = () => false) {
 
@@ -56,6 +57,13 @@ class Player {
 				setTimeout(() => {
 					this.weapon = weapons[0];
 				}, this.weapon.delay * 1000);
+				return;
+			}
+			if(this.firing && this.weapon.auto){
+				setTimeout(() => {
+					if(!this.firing) return;
+					this.fire();
+				}, this.weapon.delay*1000);
 			}
 		}
 

@@ -147,7 +147,11 @@ class Game {
 			nearestEntity?.activate();
 		});
 		this.keyboardController.addListener('e', 'down', () => {
+			this.player.firing = true;
 			this.player.fire();
+		});
+		this.keyboardController.addListener('e', 'up', () => {
+			this.player.firing = false;
 		});
 		this.keyboardController.focus();
 	}
