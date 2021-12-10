@@ -62,7 +62,7 @@ class Renderer {
 		this.sprites.sort((a, b) => {
 			const distA = calcDist(this.player.x, this.player.y, a.x, a.y);
 			const distB = calcDist(this.player.x, this.player.y, b.x, b.y);
-			return distA - distB;
+			return distB - distA;
 		});
 
 		this.drawSprites();
