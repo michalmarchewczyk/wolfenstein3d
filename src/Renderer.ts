@@ -58,13 +58,6 @@ class Renderer {
 			), i, offset);
 		}
 
-
-		this.sprites.sort((a, b) => {
-			const distA = calcDist(this.player.x, this.player.y, a.x, a.y);
-			const distB = calcDist(this.player.x, this.player.y, b.x, b.y);
-			return distB - distA;
-		});
-
 		this.drawSprites();
 
 		window.requestAnimationFrame(() => {
@@ -138,13 +131,25 @@ class Renderer {
 	}
 
 	drawSprites() {
+		const spritesToDraw:Sprite[] = [];
+
 		this.entities.forEach(entity => {
 			entity.sprites.forEach(sprite => {
-				this.drawSprite(sprite);
+				spritesToDraw.push(sprite);
 			});
 		});
 
 		this.sprites.forEach(sprite => {
+			spritesToDraw.push(sprite);
+		});
+
+		spritesToDraw.sort((a, b) => {
+			const distA = calcDist(this.player.x, this.player.y, a.x, a.y);
+			const distB = calcDist(this.player.x, this.player.y, b.x, b.y);
+			return distB - distA;
+		});
+
+		spritesToDraw.forEach(sprite => {
 			this.drawSprite(sprite);
 		});
 	}
