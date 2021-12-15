@@ -21,9 +21,11 @@ class Guard implements Entity, Enemy {
 	private lastFired = 0;
 	private readyToShoot = false;
 	private shootTimeout:NodeJS.Timeout|null = null;
+	private lastVector:Vector;
 
 	constructor(public x:number, public y:number,public route:Vector[] = []){
 		this.sprites = [new Sprite(x, y, spriteTextures.guardS)];
+		this.lastVector = route[0];
 	}
 
 	tick():void {
@@ -137,6 +139,15 @@ class Guard implements Entity, Enemy {
 		}
 
 
+		if(Date.now()/1000 - this.lastSeenPlayer > 5){
+			console.log('MOVE');
+			this.moving = true;
+		}
+
+		if(this.moving){
+			this.move(delta);
+		}
+
 		return false;
 	}
 
@@ -159,6 +170,21 @@ class Guard implements Entity, Enemy {
 	fire(player:Player){
 		this.lastFired = Date.now()/1000;
 		player.health -= Math.floor(Math.random()*10+5);
+	}
+
+	move(delta:number){
+		const nextVectorIndex = (this.route.findIndex(v => v===this.lastVector) + 1) % this.route.length;
+		const nextVector = this.route[nextVectorIndex];
+		if(Math.abs(nextVector.x - this.x) < 0.1 && Math.abs(nextVector.y - this.y) < 0.1){
+			this.lastVector = nextVector;
+			return;
+		}
+		this.x += Math.sign(nextVector.x - this.x) * delta;
+		this.y += Math.sign(nextVector.y - this.y) * delta;
+		this.direction = Math.atan2(
+			Math.sign(nextVector.y - this.y),
+			Math.sign(nextVector.x - this.x)
+		);
 	}
 
 	activate() {

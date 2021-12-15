@@ -33,6 +33,23 @@ $scale: 1.5;
       }
     }
 
+    .overlayRed {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #d92e2e;
+      opacity: 0;
+      transition: opacity 0.1s linear;
+
+      &.overlayRedOn{
+        opacity: 0.3;
+        transition: opacity 0.05s linear;
+      }
+    }
+
+
     .hudStats {
       position: absolute;
       width: 640px;

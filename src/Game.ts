@@ -33,6 +33,7 @@ class Game {
 	private entities:Entity[] = [];
 	private level = 1;
 	private raycaster:Raycaster;
+	private lastPlayerHealth = 100;
 
 	constructor() {
 		this.player = new Player(30.5, 49.5, 0, (x, y) => {
@@ -89,6 +90,10 @@ class Game {
 		const delta = this.animationClock.getDelta();
 
 		this.player.tick(delta);
+		if(this.lastPlayerHealth > this.player.health){
+			this.hud.flashRed();
+		}
+		this.lastPlayerHealth = this.player.health;
 		this.entities.forEach(entity => {
 			entity.tick(delta);
 			if(entity instanceof Guard){

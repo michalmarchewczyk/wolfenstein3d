@@ -3,6 +3,7 @@ import Door from '@src/entities/Door';
 import HiddenDoor from '@src/entities/HiddenDoor';
 import {spriteTextures} from '@src/sprites/SpriteTexture';
 import Guard from '@src/entities/Guard';
+import Vector from '@src/utils/math/Vector';
 
 const entities:Entity[] = [
 	new Door(33.5, 49.5, 'NS'),
@@ -32,7 +33,10 @@ const entities:Entity[] = [
 	new HiddenDoor(17.5, 43.5, 'WE', spriteTextures.stoneWall),
 	new HiddenDoor(13.5, 46.5, 'NS', spriteTextures.stoneWall),
 
-	new Guard(35.5, 46.5),
+	new Guard(35.5, 46.5, [
+		new Vector(35.5, 45.5),
+		new Vector(35.5, 52.5),
+	]),
 ];
 
 
