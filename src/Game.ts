@@ -15,6 +15,7 @@ import CollectableSprite from '@src/sprites/collectable/CollectableSprite';
 import {calcDist} from '@src/utils/math/distance';
 import Guard from '@src/entities/Guard';
 import Raycaster from '@src/utils/math/Raycaster';
+import AmmoBox from '@src/sprites/collectable/AmmoBox';
 
 
 class Game {
@@ -91,7 +92,10 @@ class Game {
 		this.entities.forEach(entity => {
 			entity.tick(delta);
 			if(entity instanceof Guard){
-				entity.tickEnemy(delta, this.player, this.raycaster);
+				const dead = entity.tickEnemy(delta, this.player, this.raycaster);
+				if(dead){
+					this.sprites.push(new AmmoBox(entity.x, entity.y));
+				}
 			}
 		});
 

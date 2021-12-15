@@ -17,6 +17,10 @@ class Guard implements Entity, Enemy {
 	private lastShot = 0;
 	private dead = false;
 	private lastDeath = 0;
+	private lastSeenPlayer = 0;
+	private lastFired = 0;
+	private readyToShoot = false;
+	private shootTimeout:NodeJS.Timeout|null = null;
 
 	constructor(public x:number, public y:number,public route:Vector[] = []){
 		this.sprites = [new Sprite(x, y, spriteTextures.guardS)];
@@ -26,7 +30,9 @@ class Guard implements Entity, Enemy {
 		//
 	}
 
-	tickEnemy(delta:number, player:Player, raycaster:Raycaster):void {
+	tickEnemy(delta:number, player:Player, raycaster:Raycaster):boolean {
+		this.readyToShoot = false;
+
 		if(this.dead){
 			const sinceDeath = Date.now()/1000 - this.lastDeath;
 			if(sinceDeath < 0.2){
@@ -41,7 +47,7 @@ class Guard implements Entity, Enemy {
 				this.sprites[0].texture = spriteTextures.guardD5;
 			}
 
-			return;
+			return false;
 		}
 
 		this.sprites[0].x = this.x;
@@ -88,25 +94,56 @@ class Guard implements Entity, Enemy {
 		if(seeingPlayer){
 			this.moving = false;
 			this.sprites[0].texture = spriteTextures.guardF2;
+			this.lookAtPlayer(angle);
 		}
 
 		if(Date.now()/1000 - this.lastShot < 0.3){
 			this.sprites[0].texture = spriteTextures.guardShot;
 		}
 
+		if(Date.now()/1000 - this.lastFired < 0.3){
+			this.sprites[0].texture = spriteTextures.guardF3;
+		}
+
 		if(player.firing){
 			const aimed = this.checkPlayerAim(player);
 			if(aimed && this.lastShot != player.lastFire){
 				this.lastShot = player.lastFire;
+				this.lookAtPlayer(angle);
 				if(player.weapon.range > dist && raycastPlayer.distance > dist){
 					this.health = this.health - player.weapon.damage;
 					if(this.health < 0){
 						this.dead = true;
+						this.collision = false;
 						this.lastDeath = Date.now()/1000;
+						return true;
 					}
 				}
 			}
 		}
+
+		if(this.readyToShoot && Date.now()/1000 - this.lastFired > 0.5){
+			if(!this.shootTimeout){
+				this.shootTimeout = setTimeout(() => {
+					this.fire(player);
+					this.shootTimeout = null;
+				}, 500);
+			}
+		}else{
+			if(this.shootTimeout){
+				clearTimeout(this.shootTimeout);
+				this.shootTimeout = null;
+			}
+		}
+
+
+		return false;
+	}
+
+	lookAtPlayer(angle: number) {
+		this.direction = (this.direction - angle * Math.PI + 2*Math.PI) % (2*Math.PI);
+		this.lastSeenPlayer = Date.now()/1000;
+		this.readyToShoot = angle < 0.001;
 	}
 
 	checkPlayerAim(player:Player):boolean {
@@ -119,8 +156,9 @@ class Guard implements Entity, Enemy {
 		return angle >= -0.2/dist && angle <= 0.2/dist;
 	}
 
-	fire(){
-		//
+	fire(player:Player){
+		this.lastFired = Date.now()/1000;
+		player.health -= Math.floor(Math.random()*10+5);
 	}
 
 	activate() {
