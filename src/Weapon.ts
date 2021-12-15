@@ -6,6 +6,7 @@ interface Weapon {
 	range:number,
 	angle:number,
 	auto:boolean,
+	damage: number,
 }
 
 export default Weapon;
@@ -16,9 +17,10 @@ const weapons:Weapon[] = [
 		yTex: 0,
 		xTex: 0,
 		delay: 0.6,
-		range: 2,
+		range: 1,
 		angle: 1,
-		auto: false
+		auto: false,
+		damage: 100,
 	},
 	{
 		name: 'pistol',
@@ -27,7 +29,8 @@ const weapons:Weapon[] = [
 		delay: 0.4,
 		range: 100,
 		angle: 0.2,
-		auto: false
+		auto: false,
+		damage: 20,
 	},
 	{
 		name: 'rifle',
@@ -36,7 +39,8 @@ const weapons:Weapon[] = [
 		delay: 0.2,
 		range: 200,
 		angle: 0.2,
-		auto: true
+		auto: true,
+		damage: 50,
 	},
 	{
 		name: 'minigun',
@@ -45,7 +49,8 @@ const weapons:Weapon[] = [
 		delay: 0.1,
 		range: 200,
 		angle: 0.4,
-		auto: true
+		auto: true,
+		damage: 20,
 	}
 ];
 

@@ -15,7 +15,7 @@ class Raycaster {
 
 	}
 
-	raycast(vRayDir:Vector, vRayStart:Vector):RaycasterResult {
+	raycast(vRayDir:Vector, vRayStart:Vector, fMaxDistance = 100):RaycasterResult {
 		vRayDir = vRayDir.normalized;
 
 		const vRayUnitStepSize = new Vector(Math.abs(1 / vRayDir.x), Math.abs(1 / vRayDir.y),);
@@ -31,7 +31,6 @@ class Raycaster {
 
 
 		let bTileFound = false;
-		const fMaxDistance = 100;
 		let fDistance = 0;
 		let side = 0;
 		let vFound = new Vector(0, 0);

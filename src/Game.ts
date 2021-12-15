@@ -13,6 +13,8 @@ import {entities} from '@src/maps/map1/entities';
 import HUD from '@src/HUD/HUD';
 import CollectableSprite from '@src/sprites/collectable/CollectableSprite';
 import {calcDist} from '@src/utils/math/distance';
+import Guard from '@src/entities/Guard';
+import Raycaster from '@src/utils/math/Raycaster';
 
 
 class Game {
@@ -29,6 +31,7 @@ class Game {
 	private animationClock:AnimationClock;
 	private entities:Entity[] = [];
 	private level = 1;
+	private raycaster:Raycaster;
 
 	constructor() {
 		this.player = new Player(30.5, 49.5, 0, (x, y) => {
@@ -52,6 +55,10 @@ class Game {
 		this.element.appendChild(this.hud.render());
 		this.element.classList.add('game');
 		this.initControls();
+
+		this.raycaster = new Raycaster((x:number, y:number) => {
+			return this.map[x]?.[y]?.type.opaque || !!this.entities.find(e => Math.floor(e.x) === x && Math.floor(e.y) === y)?.collision;
+		});
 
 		this.animationClock = new AnimationClock();
 		window.requestAnimationFrame(() => {
@@ -83,6 +90,9 @@ class Game {
 		this.player.tick(delta);
 		this.entities.forEach(entity => {
 			entity.tick(delta);
+			if(entity instanceof Guard){
+				entity.tickEnemy(delta, this.player, this.raycaster);
+			}
 		});
 
 		this.sprites.forEach(sprite => {
