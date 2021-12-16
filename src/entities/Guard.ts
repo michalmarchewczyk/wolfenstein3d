@@ -21,11 +21,13 @@ class Guard implements Entity, Enemy {
 	private lastFired = 0;
 	private readyToShoot = false;
 	private shootTimeout:NodeJS.Timeout|null = null;
-	private lastVector:Vector;
+	private lastVector:Vector|null = null;
 
 	constructor(public x:number, public y:number,public path:Vector[] = []){
 		this.sprites = [new Sprite(x, y, spriteTextures.guardS)];
-		this.lastVector = path[0];
+		if(this.path.length > 0){
+			this.lastVector = path[0];
+		}
 	}
 
 	tick():void {
@@ -139,7 +141,7 @@ class Guard implements Entity, Enemy {
 		}
 
 
-		if(Date.now()/1000 - this.lastSeenPlayer > 5){
+		if(Date.now()/1000 - this.lastSeenPlayer > 5 && this.path.length > 0){
 			this.moving = true;
 		}
 
@@ -172,6 +174,9 @@ class Guard implements Entity, Enemy {
 	}
 
 	move(delta:number){
+		if(this.path.length < 1){
+			return;
+		}
 		const nextVectorIndex = (this.path.findIndex(v => v===this.lastVector) + 1) % this.path.length;
 		const nextVector = this.path[nextVectorIndex];
 		if(Math.abs(nextVector.x - this.x) < 0.1 && Math.abs(nextVector.y - this.y) < 0.1){
@@ -182,7 +187,7 @@ class Guard implements Entity, Enemy {
 		this.y += Math.sign(nextVector.y - this.y) * delta;
 		this.direction = Math.atan2(
 			Math.sign(nextVector.y - this.y),
-			Math.sign(nextVector.x - this.x)
+			Math.sign(this.x - nextVector.x)
 		);
 	}
 

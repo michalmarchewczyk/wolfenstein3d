@@ -33,10 +33,66 @@ const entities:Entity[] = [
 	new HiddenDoor(17.5, 43.5, 'WE', spriteTextures.stoneWall),
 	new HiddenDoor(13.5, 46.5, 'NS', spriteTextures.stoneWall),
 
-	new Guard(35.5, 46.5, [
-		new Vector(35.5, 45.5),
-		new Vector(35.5, 52.5),
+	new Guard(29.5, 52.5, [
+		new Vector(29.5, 52.5),
+		new Vector(29.5, 54.5),
 	]),
+
+	new Guard(40.5, 52.5, [
+		new Vector(40.5, 52.5),
+		new Vector(40.5, 54.5),
+	]),
+
+	new Guard(35.5, 34.5, [
+		new Vector(35.5, 34.5),
+		new Vector(35.5, 39.5),
+	]),
+
+	new Guard(30.5, 26.5, [
+		new Vector(30.5, 26.5),
+		new Vector(39.5, 26.5),
+	]),
+
+	new Guard(56.5, 26.5, [
+		new Vector(56.5, 26.5),
+		new Vector(60.5, 26.5),
+	]),
+
+	new Guard(49.5, 38.5),
+
+	new Guard(32.5, 15.5),
+
+	new Guard(32.5, 4.5, [
+		new Vector(32.5, 4.5),
+		new Vector(38.5, 4.5),
+	]),
+
+	new Guard(19.5, 9.5),
+
+	new Guard(7.5, 9.5, [
+		new Vector(7.5, 9.5),
+		new Vector(12.5, 9.5),
+		new Vector(12.5, 11.5),
+		new Vector(7.5, 11.5),
+	]),
+
+	new Guard(7.5, 26.5, [
+		new Vector(7.5, 26.5),
+		new Vector(12.5, 26.5),
+	]),
+
+	new Guard(2.5, 40.5, [
+		new Vector(2.5, 40.5),
+		new Vector(2.5, 30.5),
+		new Vector(2.5, 40.5),
+		new Vector(10.5, 40.5),
+	]),
+
+	new Guard(22.5, 39.5, [
+		new Vector(22.5, 39.5),
+		new Vector(22.5, 41.5),
+	]),
+
 ];
 
 

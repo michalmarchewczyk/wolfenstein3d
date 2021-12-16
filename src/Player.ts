@@ -55,7 +55,9 @@ class Player {
 			}
 			if(this.ammo === 0){
 				setTimeout(() => {
-					this.weapon = weapons[0];
+					if(this.ammo === 0) {
+						this.weapon = weapons[0];
+					}
 				}, this.weapon.delay * 1000);
 				return;
 			}
