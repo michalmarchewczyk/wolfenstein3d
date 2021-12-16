@@ -230,9 +230,9 @@ class Game {
 
 		this.entities.forEach(entity => {
 			if(entity instanceof Guard){
+				entity.health = 30;
 				if(entity.dead){
 					entity.dead = false;
-					entity.health = 30;
 					entity.collision = true;
 				}
 			}
@@ -252,6 +252,15 @@ class Game {
 
 		this.initControls();
 
+	}
+
+
+	setDifficulty(diff:number):void {
+		this.entities.forEach(entity => {
+			if(entity instanceof Guard){
+				entity.health = 30 + diff * 15; // 30, 45, 60, 75
+			}
+		});
 	}
 
 	render():HTMLDivElement[] {

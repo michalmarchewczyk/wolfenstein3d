@@ -22,8 +22,9 @@ document.body.onload = () => {
 	const preview = game.render()[1];
 	document.body.appendChild(preview);
 
-	menu = new Menu(() => {
+	menu = new Menu((diff) => {
 		game.initControls();
+		game.setDifficulty(diff);
 	});
 	view.appendChild(menu.render());
 };
