@@ -4,6 +4,7 @@ import HiddenDoor from '@src/entities/HiddenDoor';
 import {spriteTextures} from '@src/sprites/SpriteTexture';
 import Guard from '@src/entities/Guard';
 import Vector from '@src/utils/math/Vector';
+import SteelDoor from '@src/entities/SteelDoor';
 
 const entities:Entity[] = [
 	new Door(33.5, 49.5, 'NS'),
@@ -26,6 +27,9 @@ const entities:Entity[] = [
 	new Door(2.5, 16.5, 'EW'),
 	new Door(5.5, 26.5, 'NS'),
 	new Door(17.5, 40.5, 'NS'),
+
+	new SteelDoor(24.5, 40.5, 'NS'),
+	new SteelDoor(11.5, 44.5, 'NS'),
 
 	new HiddenDoor(31.5, 15.5, 'WE', spriteTextures.woodWall2),
 	new HiddenDoor(10.5, 6.5, 'SN', spriteTextures.stoneWall4),

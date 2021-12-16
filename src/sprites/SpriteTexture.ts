@@ -20,6 +20,7 @@ export const spriteTextures:SpriteTextures = {
 	column: new SpriteTexture(516, 129),
 	door: new SpriteTexture(387, 1032),
 	door2: new SpriteTexture(516, 1032),
+	doorSteel: new SpriteTexture(129, 1419),
 
 	chicken: new SpriteTexture(129, 645),
 	ammoBox: new SpriteTexture(387, 645),
