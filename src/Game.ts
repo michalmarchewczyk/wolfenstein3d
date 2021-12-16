@@ -217,6 +217,16 @@ class Game {
 			}
 		});
 
+		this.entities.forEach(entity => {
+			if(entity instanceof Guard){
+				if(entity.dead){
+					entity.dead = false;
+					entity.health = 30;
+					entity.collision = true;
+				}
+			}
+		});
+
 		this.renderer = new Renderer(this.map, this.tiles, this.player, this.sprites, this.entities);
 		this.hud = new HUD();
 		this.element.appendChild(this.renderer.render());

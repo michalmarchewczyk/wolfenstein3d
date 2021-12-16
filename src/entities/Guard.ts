@@ -15,7 +15,7 @@ class Guard implements Entity, Enemy {
 	public moving = false;
 	private time = 0;
 	private lastShot = 0;
-	private dead = false;
+	public dead = false;
 	private lastDeath = 0;
 	private lastSeenPlayer = 0;
 	private lastFired = 0;
