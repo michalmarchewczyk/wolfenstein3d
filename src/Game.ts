@@ -56,7 +56,7 @@ class Game {
 		this.element.appendChild(this.renderer.render());
 		this.element.appendChild(this.hud.render());
 		this.element.classList.add('game');
-		this.initControls();
+		// this.initControls();
 
 		this.raycaster = new Raycaster((x:number, y:number) => {
 			return this.map[x]?.[y]?.type.opaque || !!this.entities.find(e => Math.floor(e.x) === x && Math.floor(e.y) === y)?.collision;

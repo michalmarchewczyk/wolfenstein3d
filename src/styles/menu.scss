@@ -1,0 +1,33 @@
+$scale: 1.5;
+
+.menu {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 640px * $scale;
+  height: 480px * $scale;
+  background: black;
+  opacity: 1;
+  transition: opacity 0.8s linear;
+
+  &.menuOff {
+    opacity: 0;
+    pointer-events: none;
+    display: none;
+  }
+
+  .menuOverlay {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 0.8s linear;
+
+    &.menuOverlayOn {
+      opacity: 1;
+    }
+  }
+}
+
