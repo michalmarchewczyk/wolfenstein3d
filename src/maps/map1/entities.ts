@@ -60,7 +60,7 @@ const entities:Entity[] = [
 
 	new Guard(49.5, 38.5),
 
-	new Guard(32.5, 15.5),
+	new Guard(33.5, 15.5),
 
 	new Guard(32.5, 4.5, [
 		new Vector(32.5, 4.5),
