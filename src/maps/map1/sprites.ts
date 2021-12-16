@@ -9,6 +9,7 @@ import GoldCross from '@src/sprites/collectable/GoldCross';
 import GoldBox from '@src/sprites/collectable/GoldBox';
 import Face from '@src/sprites/collectable/Face';
 import Rifle from '@src/sprites/collectable/Rifle';
+import WinSprite from '@src/sprites/collectable/WinSprite';
 
 const sprites:Sprite[] = [
 
@@ -148,6 +149,8 @@ const sprites:Sprite[] = [
 	// stone-6
 	new AidKit(19.5, 43.5),
 	new Face(14.5, 48.5),
+
+	new WinSprite(25.5, 40.5),
 
 ];
 

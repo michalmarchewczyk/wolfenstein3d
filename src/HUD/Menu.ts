@@ -13,6 +13,7 @@ import menu51 from '@src/assets/menu/menu5-1.png';
 import menu52 from '@src/assets/menu/menu5-2.png';
 import menu53 from '@src/assets/menu/menu5-3.png';
 import menu54 from '@src/assets/menu/menu5-4.png';
+import menu6 from '@src/assets/menu/menu6.png';
 import {delay} from '@src/utils/delay';
 import KeyboardController from '@src/utils/KeyboardController';
 
@@ -62,7 +63,6 @@ class Menu {
 	}
 
 	async showMenu() {
-		console.log('showMenu');
 		this.element.classList.remove('menuOff');
 		await delay(400);
 		this.overlay.classList.add('menuOverlayOn');
@@ -91,7 +91,6 @@ class Menu {
 			await this.showDiff();
 		});
 		this.keyboardController.focus();
-		console.log('after show Menu');
 	}
 
 
@@ -139,7 +138,6 @@ class Menu {
 			await this.refreshDiff(selected+1);
 		});
 		this.keyboardController.addListener('enter', 'down', async () => {
-			console.log('enter', selected);
 			this.overlay.classList.remove('menuOverlayOn');
 			await delay(800);
 			this.element.classList.add('menuOff');
@@ -158,6 +156,20 @@ class Menu {
 		} else if (selected === 4) {
 			this.overlay.src = menu54;
 		}
+	}
+
+
+	async showWin(score:number, time:number, killRatio:number, secretRatio:number, treasureRatio:number) {
+		console.log('WIN', score, time, killRatio, secretRatio, treasureRatio);
+		this.overlay.src = menu6;
+		this.element.classList.remove('menuOff');
+		await delay(400);
+		this.overlay.classList.add('menuOverlayOn');
+		await delay(3600);
+		this.overlay.classList.remove('menuOverlayOn');
+		await delay(800);
+
+		await this.showMenu();
 	}
 
 	render():HTMLDivElement {

@@ -117,6 +117,7 @@ class Guard implements Entity, Enemy {
 				if(player.weapon.range > dist && raycastPlayer.distance > dist){
 					this.health = this.health - player.weapon.damage;
 					if(this.health < 0){
+						player.score += 100;
 						this.dead = true;
 						this.collision = false;
 						this.lastDeath = Date.now()/1000;
@@ -169,6 +170,7 @@ class Guard implements Entity, Enemy {
 	}
 
 	fire(player:Player){
+		if(!this.readyToShoot) return;
 		this.lastFired = Date.now()/1000;
 		player.health -= Math.floor(Math.random()*10+5);
 	}

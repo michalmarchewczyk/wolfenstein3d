@@ -7,10 +7,13 @@ document.body.onload = () => {
 	let menu:Menu|null = null;
 	let view:HTMLDivElement|null = null;
 	const game = new Game(() => {
-		console.log('dead', menu);
 		if(!menu || !view) return;
 		menu.showMenu();
 		view.appendChild(menu.render());
+	}, (score, time, killRatio, secretRatio, treasureRatio) => {
+		if(!menu || !view) return;
+		view.appendChild(menu.render());
+		menu.showWin(score, time, killRatio, secretRatio, treasureRatio);
 	});
 
 	view = game.render()[0];

@@ -16,6 +16,7 @@ import {calcDist} from '@src/utils/math/distance';
 import Guard from '@src/entities/Guard';
 import Raycaster from '@src/utils/math/Raycaster';
 import AmmoBox from '@src/sprites/collectable/AmmoBox';
+import WinSprite from '@src/sprites/collectable/WinSprite';
 
 
 class Game {
@@ -35,7 +36,10 @@ class Game {
 	private raycaster:Raycaster;
 	private lastPlayerHealth = 100;
 
-	constructor(public onDead:() => void) {
+	constructor(
+		public onDead:() => void,
+		public onWin:(score:number, time:number, killRatio:number, secretRatio:number, treasureRatio:number)=>void
+	) {
 		this.player = new Player(30.5, 49.5, 0, (x, y) => {
 			const foundTile = this.tiles
 				.filter(t => t.x === Math.floor(x) && t.y === Math.floor(y))
@@ -112,6 +116,11 @@ class Game {
 					const collected = sprite.collect(this.player);
 					if(collected) {
 						this.hud.flash();
+						if(sprite instanceof WinSprite){
+							this.restart(4);
+							this.keyboardController.clearListeners();
+							this.onWin(this.player.score, 100, 1, 1, 1);
+						}
 					}
 				}
 			}

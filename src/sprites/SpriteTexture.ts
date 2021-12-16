@@ -16,6 +16,8 @@ interface SpriteTextures {
 
 export const spriteTextures:SpriteTextures = {
 	debug: new SpriteTexture(0, 0),
+	null: new SpriteTexture(129, 1548),
+
 	lamp: new SpriteTexture(129, 387),
 	column: new SpriteTexture(516, 129),
 	door: new SpriteTexture(387, 1032),
