@@ -35,7 +35,7 @@ class Game {
 	private raycaster:Raycaster;
 	private lastPlayerHealth = 100;
 
-	constructor() {
+	constructor(public onDead:() => void) {
 		this.player = new Player(30.5, 49.5, 0, (x, y) => {
 			const foundTile = this.tiles
 				.filter(t => t.x === Math.floor(x) && t.y === Math.floor(y))
@@ -126,7 +126,9 @@ class Game {
 				this.restart(this.player.lives);
 			}else{
 				this.hud.flashDead();
-				alert('YOU DIED');
+				this.restart(4);
+				this.keyboardController.clearListeners();
+				this.onDead();
 			}
 		}
 

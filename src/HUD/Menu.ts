@@ -62,6 +62,8 @@ class Menu {
 	}
 
 	async showMenu() {
+		console.log('showMenu');
+		this.element.classList.remove('menuOff');
 		await delay(400);
 		this.overlay.classList.add('menuOverlayOn');
 		let selected = 0;
@@ -89,6 +91,7 @@ class Menu {
 			await this.showDiff();
 		});
 		this.keyboardController.focus();
+		console.log('after show Menu');
 	}
 
 
