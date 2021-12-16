@@ -18,7 +18,7 @@ class RendererPreview {
 	private tileSelector = document.createElement('div');
 	private selectedIndex = 0;
 
-	constructor(private map:Tile[][], private tiles:Tile[], private player:Player, private sprites:Sprite[], private entities:Entity[] = []) {
+	constructor(private map:Tile[][], private tiles:Tile[], public player:Player, private sprites:Sprite[], private entities:Entity[] = []) {
 
 		this.ctxD = <CanvasRenderingContext2D>this.canvasDynamic.getContext('2d', {alpha: true});
 		this.canvasDynamic.width = PREVIEW_SIZE;

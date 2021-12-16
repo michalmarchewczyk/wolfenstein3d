@@ -16,8 +16,8 @@ abstract class CollectableSprite extends Sprite {
 
 	collect(player:Player):boolean {
 		if (this.callback(player)) {
-			this.x = -2000;
-			this.y = -2000;
+			this.x = this.x - 2000;
+			this.y = this.y - 2000;
 			return true;
 		}
 		return false;

@@ -19,6 +19,7 @@ class HUD {
 	private readonly weaponImage:HTMLDivElement;
 	private readonly overlay:HTMLDivElement;
 	private readonly overlayRed:HTMLDivElement;
+	private readonly overlayDead:HTMLDivElement;
 
 	constructor() {
 		this.element = document.createElement('div');
@@ -86,6 +87,11 @@ class HUD {
 		this.overlayRed.classList.add('overlayRed');
 		this.element.appendChild(this.overlayRed);
 
+
+		this.overlayDead = document.createElement('div');
+		this.overlayDead.classList.add('overlayDead');
+		this.element.appendChild(this.overlayDead);
+
 	}
 
 	draw(delta:number, player:Player, level:number) {
@@ -139,6 +145,13 @@ class HUD {
 		setTimeout(() => {
 			this.overlayRed.classList.remove('overlayRedOn');
 		}, 50);
+	}
+
+	flashDead(){
+		this.overlayRed.classList.add('overlayRedOn');
+		setTimeout(() => {
+			this.overlayRed.classList.remove('overlayRedOn');
+		}, 2000);
 	}
 
 	render():HTMLDivElement {

@@ -33,10 +33,6 @@ class Renderer {
 		this.raycaster = new Raycaster((x:number, y:number) => {
 			return this.map[x]?.[y]?.type.opaque;
 		});
-
-		window.requestAnimationFrame(() => {
-			this.draw();
-		});
 	}
 
 	draw():void {
@@ -59,10 +55,6 @@ class Renderer {
 		}
 
 		this.drawSprites();
-
-		window.requestAnimationFrame(() => {
-			this.draw();
-		});
 	}
 
 	raycast(vRayDir:Vector, scanline:number, angle:number):void {

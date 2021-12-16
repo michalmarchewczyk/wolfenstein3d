@@ -26,7 +26,7 @@ class Game {
 	private rendererPreview:RendererPreview;
 	private hud:HUD;
 	private tiles:Tile[] = [];
-	private readonly player:Player;
+	private player:Player;
 	private readonly element:HTMLDivElement;
 	private keyboardController:KeyboardController = new KeyboardController();
 	private animationClock:AnimationClock;
@@ -94,6 +94,7 @@ class Game {
 			this.hud.flashRed();
 		}
 		this.lastPlayerHealth = this.player.health;
+
 		this.entities.forEach(entity => {
 			entity.tick(delta);
 			if(entity instanceof Guard){
@@ -117,6 +118,19 @@ class Game {
 		});
 
 		this.hud.draw(delta, this.player, this.level);
+
+		if(this.player.health <= 0){
+			this.player.health = 0;
+			if(this.player.lives > 1){
+				this.hud.flashDead();
+				this.restart(this.player.lives);
+			}else{
+				this.hud.flashDead();
+				alert('YOU DIED');
+			}
+		}
+
+		this.renderer.draw();
 
 		window.requestAnimationFrame(() => {
 			this.tick();
@@ -173,6 +187,50 @@ class Game {
 			this.player.firing = false;
 		});
 		this.keyboardController.focus();
+	}
+
+	async restart(lives:number){
+
+		while(this.element.firstChild){
+			this.element.removeChild(this.element.firstChild);
+		}
+
+		this.player = new Player(30.5, 49.5, 0, (x, y) => {
+			const foundTile = this.tiles
+				.filter(t => t.x === Math.floor(x) && t.y === Math.floor(y))
+				.find(t => t.type.opaque);
+			const foundEntity = this.entities
+				.filter(e => Math.floor(e.x) === Math.floor(x) && Math.floor(e.y) === Math.floor(y))
+				.find(e => e.collision);
+			const foundSprite = this.sprites
+				.filter(s => Math.floor(s.x) === Math.floor(x) && Math.floor(s.y) === Math.floor(y))
+				.find(s => s.collision);
+			return (foundTile !== undefined || foundEntity !== undefined || foundSprite !== undefined);
+		});
+
+		this.player.lives = lives - 1;
+
+		this.sprites.forEach(sprite => {
+			if(sprite.x < 0){
+				sprite.x += 2000;
+				sprite.y += 2000;
+			}
+		});
+
+		this.renderer = new Renderer(this.map, this.tiles, this.player, this.sprites, this.entities);
+		this.hud = new HUD();
+		this.element.appendChild(this.renderer.render());
+		this.element.appendChild(this.hud.render());
+
+		this.rendererPreview.player = this.player;
+
+		this.raycaster = new Raycaster((x:number, y:number) => {
+			return this.map[x]?.[y]?.type.opaque || !!this.entities.find(e => Math.floor(e.x) === x && Math.floor(e.y) === y)?.collision;
+		});
+
+
+		this.initControls();
+
 	}
 
 	render():HTMLDivElement[] {
